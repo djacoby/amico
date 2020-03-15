@@ -36,12 +36,14 @@ router.post(
       .not()
       .isEmpty(),
     check('email', 'Please include valid email').isEmail(),
-    check('password').custom(value => {
+    check(
+      'password',
+      'Please enter valid password (Minimum 8 characters with one uppercase letter and one number.)'
+    ).custom(value => {
       const isPwValid = pwSchema.validate(value);
 
       // When at least one requirement is not met
       if (!isPwValid) {
-        // TODO : May be redundant, testing required
         throw new Error(
           `Password does not meet requirements! (Minimum 8 characters with one uppercase letter and one number.)`
         );
@@ -81,7 +83,7 @@ router.post(
       user.password = await bcrypt.hash(password, salt);
       await user.save();
 
-      // Return json web token
+      //Return jsonwebtoken
       const payload = {
         user: {
           id: user.id
@@ -91,17 +93,16 @@ router.post(
       jwt.sign(
         payload,
         config.get('jwtSecret'),
-
-        // TODO change expiresIn value to 3600 before deploy to prod
+        //change expiresIn value to 3600 before deploy to prod
         { expiresIn: 360000 },
         (err, token) => {
-          if (error) throw error;
+          if (err) throw err;
           res.json({ token });
         }
       );
     } catch (error) {
-      console.error(error.message);
-      res.status(500).send('Sever error');
+      console.error(error.mesage);
+      res.status(500).send('Server error');
     }
   }
 );
