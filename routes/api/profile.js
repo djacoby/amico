@@ -39,15 +39,17 @@ router.post('/', auth, async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { location, bio, age } = req.body;
+  const { bio, birthday, city, state, country } = req.body;
 
   // Create profile object
   const profileFields = {};
   profileFields.user = req.user.id;
 
-  if (location) profileFields.location = location;
   if (bio) profileFields.bio = bio;
-  if (age) profileFields.age = age;
+  if (birthday) profileFields.birthday = birthday;
+  if (city) profileFields.city = city;
+  if (state) profileFields.state = state;
+  if (country) profileFields.country = country;
 
   try {
     let profile = await Profile.findOne({
@@ -81,7 +83,10 @@ router.post('/', auth, async (req, res) => {
 //@access   Public
 router.get('/', async (req, res) => {
   try {
-    const profiles = await Profile.find().populate('user', ['name']);
+    const profiles = await Profile.find().populate('user', [
+      'firstname',
+      'lastname'
+    ]);
     res.json(profiles);
   } catch (err) {
     console.error(err.message);
@@ -96,7 +101,7 @@ router.get('/user/:user_id', async (req, res) => {
   try {
     const profile = await Profile.findOne({
       user: req.params.user_id
-    }).populate('user', ['name']);
+    }).populate('user', ['firstname', 'lastname']);
 
     if (!profile) return res.status(400).json({ msg: 'Profile not found' });
 

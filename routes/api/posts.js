@@ -34,7 +34,8 @@ router.post(
 
       const newPost = new Post({
         text: req.body.text,
-        name: user.name,
+        firstname: user.firstname,
+        lastname: user.lastname,
         avatar: user.avatar,
         user: req.user.id
       });
@@ -196,7 +197,8 @@ router.post(
 
       const newComment = {
         text: req.body.text,
-        name: user.name,
+        firstname: user.firstname,
+        lastname: user.lastname,
         avatar: user.avatar,
         user: req.user.id
       };

@@ -6,14 +6,20 @@ const ProfileSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user'
   },
-  location: {
-    type: String
-  },
   bio: {
     type: String
   },
-  age: {
-    type: Number
+  birthday: {
+    type: Date
+  },
+  city: {
+    type: String
+  },
+  state: {
+    type: String
+  },
+  country: {
+    type: String
   }
   // avatar: {
   //     imageName: {

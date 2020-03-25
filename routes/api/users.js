@@ -32,7 +32,10 @@ pwSchema
 router.post(
   '/',
   [
-    check('name', 'Name is required')
+    check('firstname', 'First Name is required')
+      .not()
+      .isEmpty(),
+    check('lastname', 'Last Name is required')
       .not()
       .isEmpty(),
     check('email', 'Please include valid email').isEmail(),
@@ -59,7 +62,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { name, email, password } = req.body;
+    const { firstname, lastname, email, password } = req.body;
 
     try {
       // Check if user exists
@@ -72,7 +75,8 @@ router.post(
 
       // Create user document based based on model 'User'
       user = new User({
-        name,
+        firstname,
+        lastname,
         email,
         password
       });
