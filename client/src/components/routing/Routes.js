@@ -26,7 +26,7 @@ const Routes = () => {
         <Route exact path='/discover' component={Discover} />
         <Route exact path='/profile/:id' component={Profile} />
         {/* Private Routes */}
-        <PrivateRoute exact path='/post' component={Post} />
+        <PrivateRoute exact path='/post/:id' component={Post} />
         <PrivateRoute exact path='/profile' component={Profile} />
         <PrivateRoute exact path='/settings' component={Settings} />
         <PrivateRoute exact path='/feed' component={Feed} />

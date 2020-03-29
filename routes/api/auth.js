@@ -8,32 +8,30 @@ const { check, validationResult } = require('express-validator');
 const User = require('../../models/User');
 const auth = require('../../middleware/auth');
 
-// @route GET api/auth
-// @desc Get user by token
-// @access Private
+// @route    GET api/auth
+// @desc     Get user by token
+// @access   Private
 router.get('/', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     res.json(user);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send('Internal Server Error');
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
   }
 });
 
-// @route POST api/auth
-// @desc Authenticate and receive token for user
-// @access Public
+//@route    POST api/auth
+//@desc     Authenticate and get token
+//@access   Public
 router.post(
   '/',
   [
-    // Verify email is in valid email format, and password is not blank
     check('email', 'Please include valid email').isEmail(),
     check('password', 'Password is required').exists()
   ],
   async (req, res) => {
     const errors = validationResult(req);
-
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -41,21 +39,25 @@ router.post(
     const { email, password } = req.body;
 
     try {
-      // Check if user exists in database from email sent from the request
+      //See if user exists
       let user = await User.findOne({ email });
 
-      // Error handling if user does not exist
+      //If user exists, if so return error
       if (!user) {
-        return res.status(400).json({ msg: 'Invalid credentials' });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Invalid credentials' }] });
       }
 
-      // Check if request password is equal to user's password
       const isMatch = await bcrypt.compare(password, user.password);
+
       if (!isMatch) {
-        return res.status(400).json({ msg: 'Invalid credentials' });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Invalid credentials' }] });
       }
 
-      // Return web token as payload
+      //Return jsonwebtoken
       const payload = {
         user: {
           id: user.id
@@ -65,7 +67,7 @@ router.post(
       jwt.sign(
         payload,
         config.get('jwtSecret'),
-        // TODO change expires in value to 3600 before deploy to prod)
+        //change expiresIn value to 3600 before deploy to prod
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
@@ -73,9 +75,10 @@ router.post(
         }
       );
     } catch (error) {
-      console.error(error.message);
-      res.status(500).send('Internal Server Error');
+      console.error(error.mesage);
+      res.status(500).send('Server error');
     }
   }
 );
+
 module.exports = router;
