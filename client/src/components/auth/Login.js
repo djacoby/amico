@@ -1,39 +1,72 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { login } from '../../actions/auth';
 // Assets
 import logo from '../assets/amico-logo.png';
-const Login = () => {
+
+const Login = ({ login, isAuthenticated }) => {
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const { email, password } = formData;
+
+  //Pass form data to state
+  const onChange = e =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  //Form submission method
+  const onSubmit = async e => {
+    e.preventDefault();
+    login(email, password);
+  };
+
+  //Redirect if logged in
+  if (isAuthenticated) {
+    return <Redirect to='/feed' />;
+  }
+
   return (
     <Fragment>
-      <div className='text-center login-container'>
-        <form className='form-signin'>
+      <div className='text-center login-container mt-3'>
+        <form className='form-signin' onSubmit={e => onSubmit(e)}>
           <img className='mb-4' src={logo} alt='' width='150' height='150' />
           <h1 className='h3 mb-3 font-weight-normal'>Login</h1>
-          <label for='inputEmail' className='sr-only'>
+          <label htmlFor='inputEmail' className='sr-only'>
             Email address
           </label>
           <input
             type='email'
             id='inputEmail'
+            name='email'
             className='form-control'
             placeholder='Email address'
+            value={email}
+            onChange={e => onChange(e)}
             required
-            autofocus
+            autoFocus
           />
-          <label for='inputPassword' className='sr-only'>
+          <label htmlFor='inputPassword' className='sr-only'>
             Password
           </label>
           <input
             type='password'
             id='inputPassword'
+            name='password'
             className='form-control'
             placeholder='Password'
+            value={password}
+            onChange={e => onChange(e)}
             required
           />
-          <div className='checkbox mb-3'>
+          {/* <div className='checkbox mb-3'>
             <label>
               <input type='checkbox' value='remember-me' /> Remember me
             </label>
-          </div>
+          </div> */}
           <button className='btn btn-lg btn-logo-color btn-block' type='submit'>
             Sign in
           </button>
@@ -44,4 +77,13 @@ const Login = () => {
   );
 };
 
-export default Login;
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { login })(Login);

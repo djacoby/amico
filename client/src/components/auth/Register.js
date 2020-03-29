@@ -1,8 +1,39 @@
-import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Fragment, useState } from 'react';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setAlert } from '../../actions/alert';
+import { register } from '../../actions/auth';
+import PropTypes from 'prop-types';
 import Footer from '../layout/Footer';
 
-const Register = () => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
+  const [formData, setFormData] = useState({
+    firstname: '',
+    lastname: '',
+    email: '',
+    password: '',
+    password2: ''
+  });
+
+  const { firstname, lastname, email, password, password2 } = formData;
+
+  //Pass form data to state
+  const onChange = e =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  //Form submission method
+  const onSubmit = async e => {
+    e.preventDefault();
+    if (password !== password2) {
+      setAlert('Passwords do not match', 'danger');
+    } else {
+      register({ firstname, lastname, email, password });
+    }
+  };
+
+  if (isAuthenticated) {
+    return <Redirect to='/feed' />;
+  }
   return (
     <Fragment>
       <div className='main-container'>
@@ -16,16 +47,21 @@ const Register = () => {
 
           <div className='row'>
             <div className='col-md-12 order-md-1'>
-              <form className='needs-validation' novalidate>
+              <form
+                className='needs-validation'
+                onSubmit={e => onSubmit(e)}
+                noValidate
+              >
                 <div className='row'>
                   <div className='col-md-6 mb-3'>
-                    <label for='firstName'>First name</label>
+                    <label htmlFor='firstname'>First name</label>
                     <input
                       type='text'
                       className='form-control'
-                      id='firstName'
                       placeholder='John'
-                      value=''
+                      name='firstname'
+                      value={firstname}
+                      onChange={e => onChange(e)}
                       required
                     />
                     <div className='invalid-feedback'>
@@ -33,13 +69,14 @@ const Register = () => {
                     </div>
                   </div>
                   <div className='col-md-6 mb-3'>
-                    <label for='lastName'>Last name</label>
+                    <label htmlFor='lastname'>Last name</label>
                     <input
                       type='text'
                       className='form-control'
-                      id='lastName'
                       placeholder='Smith'
-                      value=''
+                      name='lastname'
+                      value={lastname}
+                      onChange={e => onChange(e)}
                       required
                     />
                     <div className='invalid-feedback'>
@@ -49,26 +86,31 @@ const Register = () => {
                 </div>
 
                 <div className='mb-3'>
-                  <label for='email'>Email</label>
+                  <label htmlFor='email'>Email</label>
                   <input
                     type='email'
                     className='form-control'
-                    id='email'
                     placeholder='you@example.com'
+                    name='email'
+                    value={email}
+                    onChange={e => onChange(e)}
                     required
                   />
                   <div className='invalid-feedback'>
-                    Please enter a valid email address for shipping updates.
+                    Please enter a valid email address.
                   </div>
                 </div>
 
                 <div className='mb-3'>
-                  <label for='inputPassword'>Password</label>
+                  <label htmlFor='inputPassword'>Password</label>
                   <input
                     type='password'
-                    id='inputPassword'
                     className='form-control'
                     placeholder='Enter Password'
+                    name='password'
+                    minLength='8'
+                    value={password}
+                    onChange={e => onChange(e)}
                     required
                   />
                   <div className='invalid-feedback'>
@@ -77,12 +119,15 @@ const Register = () => {
                 </div>
 
                 <div className='mb-3'>
-                  <label for='address2'>Confirm Password</label>
+                  <label htmlFor='address2'>Confirm Password</label>
                   <input
                     type='password'
-                    id='inputPassword'
                     className='form-control'
                     placeholder='Confirm Password'
+                    name='password2'
+                    minLength='8'
+                    value={password2}
+                    onChange={e => onChange(e)}
                     required
                   />
                   <div className='invalid-feedback'>Passwords do not match</div>
@@ -105,5 +150,14 @@ const Register = () => {
     </Fragment>
   );
 };
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+};
 
-export default Register;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { setAlert, register })(Register);
