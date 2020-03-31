@@ -1,63 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getPost } from '../../actions/post';
+import { Link } from 'react-router-dom';
+import Spinner from '../layout/Spinner';
+
+// Components
+import PostItem from './PostItem';
 import PostCommentForm from './PostCommentForm';
 import Comment from './Comment';
-import { ArrowLeft, ThumbsUp, ThumbsDown, XCircle } from 'react-feather';
-import avi from '../assets/default-avatar.png';
 
-const Post = () => {
-  return (
+// Assets
+import { ArrowLeft, ThumbsUp, ThumbsDown, XCircle } from 'react-feather';
+
+const Post = ({ getPost, post: { post, loading }, match }) => {
+  useEffect(() => {
+    // get id from url in params for getPost function
+    getPost(match.params.id);
+  }, [getPost]);
+  return loading || post === null ? (
+    <Spinner />
+  ) : (
     <div className='main-container mt-3'>
       <div className='container'>
         <div className='row'>
-          <a className='mb-1' href='feed.html'>
+          {/* TODO ADD BROWSER HISTORY FUNCTIONALITY TO ALLOW USER TO GO BACK TO PROFILE OR FEED */}
+          <Link className='mb-1' to='/feed'>
             <button className='btn btn-logo-color'>
               <ArrowLeft />
             </button>
-          </a>
-          <div className='card mt-1 post'>
-            <div className='card-body'>
-              <div className='row'>
-                <div className='col-lg-2'>
-                  <a className='feed-link' href='profile.html'>
-                    <img src={avi} alt='avatar' className='avatar' />
-                    <h5 className='card-title mt-2'>John Smith</h5>
-                  </a>
-                </div>
-                <div className='col-lg-10'>
-                  <p className='card-text'>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Hic, qui nulla harum dicta vero blanditiis esse! Repellat
-                    dolorem dolores, laudantium ex dolore voluptatibus amet quas
-                    optio non quod illo officiis!
-                  </p>
-                  <p className='text-muted post-date'>1:30 PM · 3/23/2020</p>
-                  <div className='post-buttons'>
-                    <button
-                      type='button'
-                      className='btn btn-outline-primary mr-1'
-                    >
-                      <ThumbsUp />
-                      <span className='badge badge-light'>4</span>
-                    </button>
-                    <button
-                      type='button'
-                      className='btn btn-outline-danger mr-1'
-                    >
-                      <ThumbsDown />
-                    </button>
-                    <button
-                      type='button'
-                      className='btn btn-outline-danger mr-1'
-                    >
-                      <XCircle />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Comment form and comments go here */}
+          </Link>
+          <PostItem key={post._id} post={post} />
           <PostCommentForm />
         </div>
         <Comment />
@@ -65,4 +38,14 @@ const Post = () => {
     </div>
   );
 };
-export default Post;
+
+Post.propTypes = {
+  getPost: PropTypes.func.isRequired,
+  post: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+  post: state.post
+});
+
+export default connect(mapStateToProps, { getPost })(Post);

@@ -49,6 +49,8 @@ const PostItem = ({
               >
                 <ThumbsDown />
               </button>
+              {/* TODO ADD CONDITIONAL RENDERING TO REMOVE WHEN POST IS OPEN */}
+
               <Link to={`/post/${_id}`}>
                 <button type='button' className='btn btn-outline-info mr-1'>
                   <MessageSquare />
