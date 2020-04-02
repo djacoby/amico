@@ -2,6 +2,8 @@ import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getPosts } from '../../actions/post';
+
+// Components
 import UserProfileCard from './UserProfileCard';
 import PostForm from './PostForm';
 import Footer from '../layout/Footer';

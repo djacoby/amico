@@ -1,24 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getPost } from '../../actions/post';
 import { Link } from 'react-router-dom';
-import Spinner from '../layout/Spinner';
 
 // Components
+import Spinner from '../layout/Spinner';
 import PostItem from './PostItem';
 import PostCommentForm from './PostCommentForm';
 import Comment from './Comment';
 
 // Assets
-import { ArrowLeft, ThumbsUp, ThumbsDown, XCircle } from 'react-feather';
+import { ArrowLeft } from 'react-feather';
 
-const Post = ({ getPost, post: { post, loading }, match }) => {
-  useEffect(() => {
-    // get id from url in params for getPost function
-    getPost(match.params.id);
-  }, [getPost]);
-  return loading || post === null ? (
+const Post = ({ post: { posts, loading }, match }) => {
+  return loading ? (
     <Spinner />
   ) : (
     <div className='main-container mt-3'>
@@ -30,7 +25,10 @@ const Post = ({ getPost, post: { post, loading }, match }) => {
               <ArrowLeft />
             </button>
           </Link>
-          <PostItem key={post._id} post={post} />
+          <PostItem
+            post={posts.find(post => post._id === match.params.id)}
+            commmentButton={false}
+          />
           <PostCommentForm />
         </div>
         <Comment />
@@ -40,7 +38,6 @@ const Post = ({ getPost, post: { post, loading }, match }) => {
 };
 
 Post.propTypes = {
-  getPost: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired
 };
 
@@ -48,4 +45,4 @@ const mapStateToProps = state => ({
   post: state.post
 });
 
-export default connect(mapStateToProps, { getPost })(Post);
+export default connect(mapStateToProps, {})(Post);

@@ -1,10 +1,12 @@
 import React from 'react';
-import { ThumbsUp, ThumbsDown, MessageSquare, XCircle } from 'react-feather';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
 import { addLike, removeLike, deletePost } from '../../actions/post';
+
+// Assets
+import { ThumbsUp, ThumbsDown, MessageSquare, XCircle } from 'react-feather';
 import avi from '../assets/default-avatar.png';
 
 const PostItem = ({
@@ -12,7 +14,8 @@ const PostItem = ({
   post: { _id, text, firstname, lastname, user, likes, comments, date },
   addLike,
   removeLike,
-  deletePost
+  deletePost,
+  commentButton
 }) => {
   return (
     <div className='card mt-1 post'>
@@ -31,6 +34,7 @@ const PostItem = ({
             <p className='text-muted post-date'>
               <Moment format='LLL'>{date}</Moment>
             </p>
+
             <div className='post-buttons'>
               <button
                 type='button'
@@ -61,6 +65,7 @@ const PostItem = ({
                   </span>
                 </button>
               </Link>
+
               {!auth.loading && user === auth.user._id && (
                 <button
                   type='button'
@@ -76,6 +81,10 @@ const PostItem = ({
       </div>
     </div>
   );
+};
+
+PostItem.defaultProps = {
+  commmentButton: true
 };
 
 PostItem.propTypes = {
