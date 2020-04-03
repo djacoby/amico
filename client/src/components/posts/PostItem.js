@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
@@ -15,8 +15,15 @@ const PostItem = ({
   addLike,
   removeLike,
   deletePost,
-  commentButton
+  feedPost,
+  history
 }) => {
+  const handleClick = id => {
+    deletePost(id);
+    if (!feedPost) {
+      history.goBack();
+    }
+  };
   return (
     <div className='card mt-1 post'>
       <div className='card-body'>
@@ -54,23 +61,28 @@ const PostItem = ({
                 <ThumbsDown />
               </button>
               {/* TODO ADD CONDITIONAL RENDERING TO REMOVE WHEN POST IS OPEN */}
-
-              <Link to={`/post/${_id}`}>
-                <button type='button' className='btn btn-outline-info mr-1'>
-                  <MessageSquare />
-                  <span className='badge badge-light'>
-                    {comments.length > 0 && (
-                      <span className='comment-count'>{comments.length}</span>
-                    )}
-                  </span>
-                </button>
-              </Link>
+              {feedPost && (
+                <Fragment>
+                  <Link to={`/post/${_id}`}>
+                    <button type='button' className='btn btn-outline-info mr-1'>
+                      <MessageSquare />
+                      <span className='badge badge-light'>
+                        {comments.length > 0 && (
+                          <span className='comment-count'>
+                            {comments.length}
+                          </span>
+                        )}
+                      </span>
+                    </button>
+                  </Link>
+                </Fragment>
+              )}
 
               {!auth.loading && user === auth.user._id && (
                 <button
                   type='button'
                   className='btn btn-outline-danger mr-1'
-                  onClick={() => deletePost(_id)}
+                  onClick={() => handleClick(_id)}
                 >
                   <XCircle />
                 </button>
@@ -84,7 +96,7 @@ const PostItem = ({
 };
 
 PostItem.defaultProps = {
-  commmentButton: true
+  feedPost: true
 };
 
 PostItem.propTypes = {

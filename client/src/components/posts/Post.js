@@ -12,7 +12,7 @@ import Comment from './Comment';
 // Assets
 import { ArrowLeft } from 'react-feather';
 
-const Post = ({ post: { posts, loading }, match }) => {
+const Post = ({ post: { posts, loading }, match, history }) => {
   return loading ? (
     <Spinner />
   ) : (
@@ -20,14 +20,18 @@ const Post = ({ post: { posts, loading }, match }) => {
       <div className='container'>
         <div className='row'>
           {/* TODO ADD BROWSER HISTORY FUNCTIONALITY TO ALLOW USER TO GO BACK TO PROFILE OR FEED */}
-          <Link className='mb-1' to='/feed'>
-            <button className='btn btn-logo-color'>
-              <ArrowLeft />
-            </button>
-          </Link>
+
+          <button
+            className='btn btn-logo-color'
+            onClick={() => history.goBack()}
+          >
+            <ArrowLeft />
+          </button>
+
           <PostItem
             post={posts.find(post => post._id === match.params.id)}
-            commmentButton={false}
+            history={history}
+            feedPost={false}
           />
           <PostCommentForm />
         </div>
