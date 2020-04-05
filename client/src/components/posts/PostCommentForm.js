@@ -1,25 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { addComment } from '../../actions/post';
 
-const PostCommentForm = () => {
+const PostCommentForm = ({ postId, addComment }) => {
+  const [text, setText] = useState('');
   return (
     <div className='col-md-12 mt-3'>
       <div className='card profile-card'>
-        <form className='mt-4' action=''>
+        <form
+          className='mt-4'
+          onSubmit={e => {
+            e.preventDefault();
+            addComment(postId, { text });
+            setText('');
+          }}
+        >
           <div className='form-group'>
             <textarea
               className='form-control'
-              id='exampleFormControlTextarea1'
               rows='5'
               placeholder='Leave a Comment!'
+              value={text}
+              onChange={e => setText(e.target.value)}
             ></textarea>
-            <a href='#'>
-              <button
-                type='button'
-                className='btn btn-logo-color mt-3 post-form-button'
-              >
-                Comment
-              </button>
-            </a>
+            <input
+              type='submit'
+              value='Comment'
+              className='btn btn-logo-color mt-3 post-form-button'
+            />
           </div>
         </form>
       </div>
@@ -27,4 +36,8 @@ const PostCommentForm = () => {
   );
 };
 
-export default PostCommentForm;
+PostCommentForm.propTypes = {
+  addComment: PropTypes.func.isRequired
+};
+
+export default connect(null, { addComment })(PostCommentForm);

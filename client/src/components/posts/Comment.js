@@ -1,30 +1,45 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Moment from 'react-moment';
+import { deleteComment } from '../../actions/post';
 import { XCircle } from 'react-feather';
 import avi from '../assets/default-avatar.png';
 
-const Comment = () => {
+const Comment = ({
+  postId,
+  comment: { _id, text, firstname, lastname, avatar, user, date },
+  auth,
+  deleteComment
+}) => {
   return (
     <div className='card mt-1 post'>
       <div className='card-body'>
         <div className='row'>
           <div className='col-lg-2'>
-            <a className='feed-link' href='profile.html'>
+            <Link className='feed-link' to={`/profile/${user}`}>
               <img src={avi} alt='avatar' className='avatar' />
-              <h5 className='card-title mt-2'>John Smith</h5>
-            </a>
+              <h5 className='card-title mt-2'>
+                {firstname} {lastname}
+              </h5>
+            </Link>
           </div>
           <div className='col-lg-10'>
-            <p className='card-text'>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Hic, qui
-              nulla harum dicta vero blanditiis esse! Repellat dolorem dolores,
-              laudantium ex dolore voluptatibus amet quas optio non quod illo
-              officiis!
+            <p className='card-text'>{text}</p>
+            <p className='text-muted post-date'>
+              <Moment format='LLL'>{date}</Moment>
             </p>
-            <p className='text-muted post-date'>2:30 PM · 3/23/2020</p>
             <div className='post-buttons'>
-              <button type='button' className='btn btn-outline-danger'>
-                <XCircle />
-              </button>
+              {!auth.loading && user === auth.user._id && (
+                <button
+                  type='button'
+                  className='btn btn-outline-danger'
+                  onClick={e => deleteComment(postId, _id)}
+                >
+                  <XCircle />
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -33,4 +48,15 @@ const Comment = () => {
   );
 };
 
-export default Comment;
+Comment.propTypes = {
+  postId: PropTypes.string.isRequired,
+  comment: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
+  deleteComment: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps, { deleteComment })(Comment);

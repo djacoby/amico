@@ -18,7 +18,7 @@ const PostItem = ({
   feedPost,
   history
 }) => {
-  const handleClick = id => {
+  const handleDelete = id => {
     deletePost(id);
     if (!feedPost) {
       history.goBack();
@@ -46,7 +46,9 @@ const PostItem = ({
               <button
                 type='button'
                 className='btn btn-outline-primary mr-1'
-                onClick={e => addLike(_id)}
+                onClick={e => {
+                  addLike(_id);
+                }}
               >
                 <ThumbsUp />
                 <span className='badge badge-light'>
@@ -82,7 +84,7 @@ const PostItem = ({
                 <button
                   type='button'
                   className='btn btn-outline-danger mr-1'
-                  onClick={() => handleClick(_id)}
+                  onClick={() => handleDelete(_id)}
                 >
                   <XCircle />
                 </button>

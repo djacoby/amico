@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-
+import { getPost } from '../../actions/post';
 // Components
 import Spinner from '../layout/Spinner';
 import PostItem from './PostItem';
@@ -12,15 +11,19 @@ import Comment from './Comment';
 // Assets
 import { ArrowLeft } from 'react-feather';
 
-const Post = ({ post: { posts, loading }, match, history }) => {
-  return loading ? (
+const Post = ({ getPost, post: { post, posts, loading }, match, history }) => {
+  useEffect(() => {
+    getPost(match.params.id);
+  }, [getPost]);
+
+  const userPost = posts.filter(post => post._id === match.params.id);
+
+  return loading || post === null ? (
     <Spinner />
   ) : (
     <div className='main-container mt-3'>
       <div className='container'>
         <div className='row'>
-          {/* TODO ADD BROWSER HISTORY FUNCTIONALITY TO ALLOW USER TO GO BACK TO PROFILE OR FEED */}
-
           <button
             className='btn btn-logo-color'
             onClick={() => history.goBack()}
@@ -28,20 +31,19 @@ const Post = ({ post: { posts, loading }, match, history }) => {
             <ArrowLeft />
           </button>
 
-          <PostItem
-            post={posts.find(post => post._id === match.params.id)}
-            history={history}
-            feedPost={false}
-          />
-          <PostCommentForm />
+          <PostItem post={userPost[0]} history={history} feedPost={false} />
+          <PostCommentForm postId={post._id} />
         </div>
-        <Comment />
+        {post.comments.map(comment => (
+          <Comment key={comment._id} postId={post._id} comment={comment} />
+        ))}
       </div>
     </div>
   );
 };
 
 Post.propTypes = {
+  getPost: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired
 };
 
@@ -49,4 +51,4 @@ const mapStateToProps = state => ({
   post: state.post
 });
 
-export default connect(mapStateToProps, {})(Post);
+export default connect(mapStateToProps, { getPost })(Post);
