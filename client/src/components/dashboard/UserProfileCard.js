@@ -13,7 +13,7 @@ const UserProfileCard = ({ auth: { user, loading } }) => {
     <div className='col-lg-4 col-md-12 mb-3'>
       <div className='card profile-card'>
         <div className='card-body'>
-          <Link className='feed-link' to='/profile'>
+          <Link className='feed-link' to={user && `/profile/${user._id}`}>
             <img src={avi} alt='avatar' className='avatar' />
             <h5 className='card-title'>
               {user && user.firstname} {user && user.lastname}

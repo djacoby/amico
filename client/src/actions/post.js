@@ -29,6 +29,23 @@ export const getPosts = () => async dispatch => {
   }
 };
 
+// Get posts from user
+export const getUserPosts = userId => async dispatch => {
+  try {
+    const res = await axios.get(`/api/posts/userposts/${userId}`);
+
+    dispatch({
+      type: GET_POSTS,
+      payload: res.data
+    });
+  } catch (error) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: error.response.data.msg, status: error.response.status }
+    });
+  }
+};
+
 // Add like
 export const addLike = postId => async dispatch => {
   try {

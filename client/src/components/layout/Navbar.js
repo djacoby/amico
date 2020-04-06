@@ -7,7 +7,7 @@ import { logout } from '../../actions/auth';
 import { Zap, List, LogIn, User, Settings, LogOut } from 'react-feather';
 import logo from '../assets/amico-logo.png';
 
-const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
+const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
   const authLinks = (
     <div className='collapse navbar-collapse' id='navbarSupportedContent'>
       <ul className='navbar-nav ml-auto'>
@@ -22,12 +22,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
           </Link>
         </li>
         <li className='nav-item'>
-          <Link
-            className='nav-link'
-            to='/profile'
-            tabIndex='-1'
-            aria-disabled='true'
-          >
+          <Link className='nav-link' to={`/profile/me`}>
             <User /> Profile
           </Link>
         </li>
@@ -37,13 +32,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
           </Link>
         </li>
         <li className='nav-item'>
-          <a
-            className='nav-link'
-            href='#!'
-            onClick={logout}
-            tabIndex='-1'
-            aria-disabled='true'
-          >
+          <a className='nav-link' href='#!' onClick={logout}>
             <LogOut /> Logout
           </a>
         </li>
