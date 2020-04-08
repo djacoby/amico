@@ -7,7 +7,7 @@ import Login from '../auth/Login';
 import Register from '../auth/Register';
 
 // Dashboard components
-import Settings from '../dashboard/Settings';
+import ProfileSettings from '../dashboard/ProfileSettings';
 import Feed from '../dashboard/Feed';
 
 // Profile components
@@ -28,7 +28,7 @@ const Routes = () => {
         {/* Private Routes */}
         <PrivateRoute exact path='/post/:id' component={Post} />
         <PrivateRoute exact path='/profile' component={Profile} />
-        <PrivateRoute exact path='/settings' component={Settings} />
+        <PrivateRoute exact path='/settings' component={ProfileSettings} />
         <PrivateRoute exact path='/feed' component={Feed} />
       </Switch>
     </section>

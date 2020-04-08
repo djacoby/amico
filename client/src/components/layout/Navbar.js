@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -22,7 +22,10 @@ const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
           </Link>
         </li>
         <li className='nav-item'>
-          <Link className='nav-link' to={`/profile/me`}>
+          <Link
+            className='nav-link'
+            to={user !== null && `/profile/${user._id}`}
+          >
             <User /> Profile
           </Link>
         </li>

@@ -1,59 +1,103 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
+import { Link, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createProfile, getCurrentProfile } from '../../actions/profile';
 import Footer from '../layout/Footer';
+import Spinner from '../layout/Spinner';
 
-const Settings = () => {
-  return (
+const ProfileSettings = ({
+  profile: { profile, loading },
+  createProfile,
+  getCurrentProfile,
+  history
+}) => {
+  const [formData, setFormData] = useState({
+    bio: '',
+    city: '',
+    state: '',
+    country: '',
+    month: '',
+    day: '',
+    year: ''
+  });
+
+  useEffect(() => {
+    getCurrentProfile();
+    // Check to see if there is current profile data and if so populate fields with current data
+    if (profile !== null) {
+      setFormData({
+        bio: loading || !profile.bio ? '' : profile.bio,
+        city: loading || !profile.city ? '' : profile.city,
+        state: loading || !profile.state ? '' : profile.state,
+        country: loading || !profile.country ? '' : profile.country
+      });
+    }
+  }, [getCurrentProfile]);
+
+  const { bio, city, state, country, month, day, year } = formData;
+
+  //On change method
+  const onChange = e =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  //On submit method
+  const onSubmit = e => {
+    e.preventDefault();
+    const profileObject = {
+      bio: bio,
+      city: city,
+      state: state,
+      country: country,
+      birthday: month + '/' + day + '/' + year
+    };
+    createProfile(formData, history, true);
+  };
+
+  return loading ? (
+    <Spinner />
+  ) : (
     <Fragment>
       <div className='main-container'>
         <div className='container'>
           <div className='pt-5'>
             <h2>Settings</h2>
-            <form className='needs-validation' novalidate>
+            <form
+              className='needs-validation'
+              noValidate
+              onSubmit={e => onSubmit(e)}
+            >
               <div className='form-group pt-3'>
-                <label for='exampleFormControlTextarea1'>Bio</label>
+                <label htmlFor='exampleFormControlTextarea1'>Bio</label>
                 <textarea
+                  value={bio}
+                  name='bio'
+                  onChange={e => onChange(e)}
                   className='form-control'
-                  id='exampleFormControlTextarea1'
                   rows='3'
                 ></textarea>
               </div>
-              <div className='row mb-3'>
-                <div className='col-md-6'>
-                  <label for='position'>Position</label>
-                  <input
-                    type='text'
-                    className='form-control'
-                    id='position'
-                    placeholder=''
-                  />
-                </div>
-                <div className='col-md-6'>
-                  <label for='employer'>Employer</label>
-                  <input
-                    type='text'
-                    className='form-control'
-                    id='employer'
-                    placeholder=''
-                  />
-                </div>
-              </div>
+
               <div className='row '>
                 <div className='col-md-4'>
-                  <label for='city'>City</label>
+                  <label htmlFor='city'>City</label>
                   <input
                     type='text'
                     className='form-control'
-                    id='zip'
-                    placeholder=''
+                    value={city}
+                    name='city'
+                    onChange={e => onChange(e)}
                     required
                   />
                   <div className='invalid-feedback'>City is required</div>
                 </div>
                 <div className='col-md-4 mb-3'>
-                  <label for='state'>State</label>
+                  <label htmlFor='state'>State</label>
                   <select
                     className='custom-select d-block w-100'
-                    id='state'
+                    value={state}
+                    name='state'
+                    onChange={e => onChange(e)}
                     required
                   >
                     <option value=''>Choose...</option>
@@ -114,13 +158,15 @@ const Settings = () => {
                   </div>
                 </div>
                 <div className='col-md-4 mb-3'>
-                  <label for='country'>Country</label>
+                  <label htmlFor='country'>Country</label>
                   <select
                     className='custom-select d-block w-100'
                     id='country'
+                    value={country}
+                    name='country'
+                    onChange={e => onChange(e)}
                     required
                   >
-                    <option value=''>Choose...</option>
                     <option value='US'>United States</option>
                   </select>
                   <div className='invalid-feedback'>
@@ -129,43 +175,51 @@ const Settings = () => {
                 </div>
               </div>
 
+              {/* TODO add conditional rendering to not display if birthday is already entered */}
+
               <div className='row'>
-                <label className='ml-3' for='state'>
+                <label className='ml-3' htmlFor='state'>
                   Birthday:
                 </label>
               </div>
 
               <div className='row'>
                 <div className='col-md-4 mb-3'>
-                  <label for='month'>Month</label>
+                  <label htmlFor='month'>Month</label>
                   <select
                     className='custom-select d-block w-100'
                     id='month'
+                    value={month}
+                    name='month'
+                    onChange={e => onChange(e)}
                     required
                   >
                     <option value=''>Choose...</option>
-                    <option value='0'>January</option>
-                    <option value='1'>February</option>
-                    <option value='2'>March</option>
-                    <option value='3'>April</option>
-                    <option value='4'>May</option>
-                    <option value='5'>June</option>
-                    <option value='6'>July</option>
-                    <option value='7'>August</option>
-                    <option value='8'>September</option>
-                    <option value='9'>October</option>
-                    <option value='10'>November</option>
-                    <option value='11'>December</option>
+                    <option value='1'>January</option>
+                    <option value='2'>February</option>
+                    <option value='3'>March</option>
+                    <option value='4'>April</option>
+                    <option value='5'>May</option>
+                    <option value='6'>June</option>
+                    <option value='7'>July</option>
+                    <option value='8'>August</option>
+                    <option value='9'>September</option>
+                    <option value='10'>October</option>
+                    <option value='11'>November</option>
+                    <option value='12'>December</option>
                   </select>
                   <div className='invalid-feedback'>
                     Please provide a valid month.
                   </div>
                 </div>
                 <div className='col-md-4 mb-3'>
-                  <label for='day'>Day</label>
+                  <label htmlFor='day'>Day</label>
                   <select
                     className='custom-select d-block w-100'
                     id='day'
+                    value={day}
+                    name='day'
+                    onChange={e => onChange(e)}
                     required
                   >
                     <option value=''>Choose...</option>
@@ -206,10 +260,13 @@ const Settings = () => {
                   </div>
                 </div>
                 <div className='col-md-4 mb-3'>
-                  <label for='year'>Year</label>
+                  <label htmlFor='year'>Year</label>
                   <select
                     className='custom-select d-block w-100'
                     id='year'
+                    value={year}
+                    name='year'
+                    onChange={e => onChange(e)}
                     required
                   >
                     <option value=''>Choose...</option>
@@ -340,16 +397,11 @@ const Settings = () => {
                   </div>
                 </div>
               </div>
+
               <hr className='mb-4' />
               <div className='form-group'>
-                <label for='exampleFormControlFile1'>
-                  Upload Profile Avatar
-                </label>
-                <input
-                  type='file'
-                  className='form-control-file'
-                  id='exampleFormControlFile1'
-                />
+                <label htmlFor='img'>Upload Profile Avatar</label>
+                <input type='file' className='form-control-file' id='img' />
               </div>
 
               <hr className='mb-4' />
@@ -369,4 +421,16 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+ProfileSettings.propTypes = {
+  createProfile: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => ({
+  profile: state.profile
+});
+
+export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
+  withRouter(ProfileSettings)
+);

@@ -28,11 +28,11 @@ const UserProfileCard = ({ auth: { user, loading } }) => {
             <RefreshCw /> Refresh
           </button>
 
-          <a href='#'>
+          <Link to='/settings'>
             <button type='button' className='btn btn-secondary mt-1'>
               <Settings /> Settings
             </button>
-          </a>
+          </Link>
         </div>
       </div>
     </div>
