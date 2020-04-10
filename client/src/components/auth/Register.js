@@ -32,7 +32,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   };
 
   if (isAuthenticated) {
-    return <Redirect to='/feed' />;
+    return <Redirect to='/settings' />;
   }
   return (
     <Fragment>

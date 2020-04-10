@@ -16,6 +16,7 @@ const Feed = ({ getCurrentProfile, getPosts, post: { posts, loading } }) => {
     getPosts();
     getCurrentProfile();
   }, [getPosts, getCurrentProfile]);
+
   return (
     <Fragment>
       <div className='main-container mt-3'>

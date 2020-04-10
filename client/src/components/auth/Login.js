@@ -70,6 +70,9 @@ const Login = ({ login, isAuthenticated }) => {
           <button className='btn btn-lg btn-logo-color btn-block' type='submit'>
             Sign in
           </button>
+          <p className='lead pt-3'>
+            Need an account? <Link to='/register'>Click Here!</Link>
+          </p>
           <p className='mt-5 mb-3 text-muted'>&copy; 2020 amico</p>
         </form>
       </div>

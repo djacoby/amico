@@ -1,4 +1,5 @@
 import React, { useEffect, Fragment } from 'react';
+import { Redirect } from 'react-router';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getProfileById } from '../../actions/profile';
@@ -24,6 +25,11 @@ const Profile = ({
     getProfileById(match.params.id);
     getUserPosts(match.params.id);
   }, [getProfileById, getUserPosts, match.params.id]);
+
+  if (profile === null) {
+    return <Redirect to='/settings' />;
+  }
+
   return loading || profile === null ? (
     <Spinner />
   ) : (

@@ -2,11 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { getPosts } from '../../actions/post';
+
+// Components
 import { RefreshCw, Settings } from 'react-feather';
 import avi from '../assets/default-avatar.png';
 import Spinner from '../layout/Spinner';
 
-const UserProfileCard = ({ auth: { user, loading } }) => {
+const UserProfileCard = ({ auth: { user, loading }, getPosts }) => {
   return loading && user === null ? (
     <Spinner />
   ) : (
@@ -23,7 +26,7 @@ const UserProfileCard = ({ auth: { user, loading } }) => {
           <button
             type='button'
             className='btn btn-logo-color mt-1 mr-1'
-            onClick={e => window.location.reload(true)}
+            onClick={() => getPosts()}
           >
             <RefreshCw /> Refresh
           </button>
@@ -40,11 +43,12 @@ const UserProfileCard = ({ auth: { user, loading } }) => {
 };
 
 UserProfileCard.propTypes = {
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  getPosts: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(UserProfileCard);
+export default connect(mapStateToProps, { getPosts })(UserProfileCard);
