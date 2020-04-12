@@ -17,12 +17,12 @@ const ProfileItem = ({
     <div className='col-lg-4 mb-3'>
       <div className='card mt-1 mb-3 post text-center'>
         <div className='card-body'>
-          <a className='feed-link' href='profile.html'>
+          <Link className='feed-link' to={`/profile/${_id}`}>
             <img src={avi} alt='avatar' className='profile-avatar' />
             <h5 className='card-title mt-2'>
               {firstname} {lastname}
             </h5>
-          </a>
+          </Link>
 
           <p className='card-text'>
             <Moment fromNow ago>
@@ -31,7 +31,7 @@ const ProfileItem = ({
             old
           </p>
           <p className='card-text'>
-            {city} {state}
+            {city}, {state}
           </p>
           <div>
             <Link to={`/profile/${_id}`}>

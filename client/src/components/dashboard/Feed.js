@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { getPosts } from '../../actions/post';
 import { getCurrentProfile } from '../../actions/profile';
 // Components
+import { Helmet } from 'react-helmet';
 import UserProfileCard from './UserProfileCard';
 import PostForm from './PostForm';
 import Footer from '../layout/Footer';
@@ -19,6 +20,9 @@ const Feed = ({ getCurrentProfile, getPosts, post: { posts, loading } }) => {
 
   return (
     <Fragment>
+      <Helmet>
+        <title>Amico · Feed</title>
+      </Helmet>
       <div className='main-container mt-3'>
         <div className='container'>
           <div className='row'>

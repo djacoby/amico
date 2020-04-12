@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/auth';
+import { Helmet } from 'react-helmet';
 // Assets
 import logo from '../assets/amico-logo.png';
 
@@ -31,6 +32,9 @@ const Login = ({ login, isAuthenticated }) => {
 
   return (
     <Fragment>
+      <Helmet>
+        <title>Amico · Login</title>
+      </Helmet>
       <div className='text-center login-container mt-3'>
         <form className='form-signin' onSubmit={e => onSubmit(e)}>
           <img className='mb-4' src={logo} alt='' width='150' height='150' />

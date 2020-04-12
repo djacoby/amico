@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getPost } from '../../actions/post';
 // Components
+import { Helmet } from 'react-helmet';
 import Spinner from '../layout/Spinner';
 import PostItem from './PostItem';
 import PostCommentForm from './PostCommentForm';
@@ -21,24 +22,29 @@ const Post = ({ getPost, post: { post, posts, loading }, match, history }) => {
   return loading || post === null ? (
     <Spinner />
   ) : (
-    <div className='main-container mt-3'>
-      <div className='container'>
-        <div className='row'>
-          <button
-            className='btn btn-logo-color'
-            onClick={() => history.goBack()}
-          >
-            <ArrowLeft />
-          </button>
+    <Fragment>
+      <Helmet>
+        <title>Amico</title>
+      </Helmet>
+      <div className='main-container mt-3'>
+        <div className='container'>
+          <div className='row'>
+            <button
+              className='btn btn-logo-color'
+              onClick={() => history.goBack()}
+            >
+              <ArrowLeft />
+            </button>
 
-          <PostItem post={userPost[0]} history={history} feedPost={false} />
-          <PostCommentForm postId={post._id} />
+            <PostItem post={userPost[0]} history={history} feedPost={false} />
+            <PostCommentForm postId={post._id} />
+          </div>
+          {post.comments.map(comment => (
+            <Comment key={comment._id} postId={post._id} comment={comment} />
+          ))}
         </div>
-        {post.comments.map(comment => (
-          <Comment key={comment._id} postId={post._id} comment={comment} />
-        ))}
       </div>
-    </div>
+    </Fragment>
   );
 };
 

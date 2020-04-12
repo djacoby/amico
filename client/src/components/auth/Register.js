@@ -5,6 +5,7 @@ import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
 import Footer from '../layout/Footer';
+import { Helmet } from 'react-helmet';
 
 const Register = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -36,6 +37,9 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   }
   return (
     <Fragment>
+      <Helmet>
+        <title>Amico · Register</title>
+      </Helmet>
       <div className='main-container'>
         <div className='container'>
           <div className='pt-5'>

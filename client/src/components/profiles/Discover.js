@@ -6,6 +6,7 @@ import { getProfiles, getCurrentProfile } from '../../actions/profile';
 
 // Components
 import Spinner from '../layout/Spinner';
+import { Helmet } from 'react-helmet';
 import { ArrowLeft } from 'react-feather';
 import ProfileItem from './ProfileItem';
 import Footer from '../layout/Footer';
@@ -24,6 +25,9 @@ const Discover = ({
     <Spinner />
   ) : (
     <Fragment>
+      <Helmet>
+        <title>Amico · Discover</title>
+      </Helmet>
       <div className='main-container mt-3'>
         <div className='container'>
           <div className='discover-header'>

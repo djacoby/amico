@@ -2,6 +2,9 @@ import React, { Fragment } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
+// Components
+import { Helmet } from 'react-helmet';
 import { List, LogIn } from 'react-feather';
 import Footer from './Footer';
 
@@ -11,6 +14,9 @@ const Landing = ({ isAuthenticated }) => {
   }
   return (
     <Fragment>
+      <Helmet>
+        <title>Amico</title>
+      </Helmet>
       <div className='jumbotron jumbotron-fluid'>
         <div className='container'>
           <h1 className='display-4'>Reach New Heights</h1>

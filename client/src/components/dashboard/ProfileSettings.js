@@ -3,6 +3,9 @@ import { withRouter, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createProfile, getCurrentProfile } from '../../actions/profile';
+
+// Components
+import { Helmet } from 'react-helmet';
 import Footer from '../layout/Footer';
 import Spinner from '../layout/Spinner';
 
@@ -76,6 +79,13 @@ const ProfileSettings = ({
     <Spinner />
   ) : (
     <Fragment>
+      <Helmet>
+        {profile === null ? (
+          <title>Amico · Create Profile</title>
+        ) : (
+          <title>Amico · Settings</title>
+        )}
+      </Helmet>
       <div className='main-container'>
         <div className='container'>
           <div className='pt-5'>

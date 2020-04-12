@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { getPosts } from '../../actions/post';
 
 // Components
+import {moduleName} from 'react-helmet';
 import { RefreshCw, Settings } from 'react-feather';
 import avi from '../assets/default-avatar.png';
 import Spinner from '../layout/Spinner';
