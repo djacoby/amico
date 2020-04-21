@@ -20,7 +20,7 @@ const Profile = ({
   profile: { profile, loading },
   post: { posts },
   match,
-  history
+  history,
 }) => {
   useEffect(() => {
     getProfileById(match.params.id);
@@ -56,7 +56,11 @@ const Profile = ({
               </button>
               <div className='card profile-card bg-logo-color mt-1'>
                 <div className='card-body'>
-                  <img src={avi} alt='avatar' className='profile-avatar' />
+                  <img
+                    src={profile.avatar ? profile.avatar : avi}
+                    alt='avatar'
+                    className='profile-avatar'
+                  />
                   <h2 className='card-title display-4 text-white mb-2 profile-name'>
                     {profile.user.firstname} {profile.user.lastname}
                   </h2>
@@ -81,7 +85,7 @@ const Profile = ({
         {/* User Posts go here */}
         <div className='mt-5 container'>
           {posts !== null &&
-            posts.map(post => <PostItem key={post._id} post={post} />)}
+            posts.map((post) => <PostItem key={post._id} post={post} />)}
         </div>
       </div>
     </Fragment>
@@ -92,13 +96,13 @@ Profile.propTypes = {
   getProfileById: PropTypes.func.isRequired,
   getUserPosts: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   profile: state.profile,
   auth: state.auth,
-  post: state.post
+  post: state.post,
 });
 
 export default connect(mapStateToProps, { getProfileById, getUserPosts })(

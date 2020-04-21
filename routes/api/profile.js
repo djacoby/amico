@@ -1,13 +1,79 @@
 const express = require('express');
 const router = express.Router();
-const request = require('request');
 const config = require('config');
-const auth = require('../../middleware/auth');
 const { check, validationResult } = require('express-validator');
-
-const Post = require('../../models/Post');
+const multer = require('multer');
+const cloudinary = require('cloudinary');
+const auth = require('../../middleware/auth');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
+
+// ----------------------- IMAGE UPLOAD ----------------------- //
+//Configure image upload
+const storage = multer.diskStorage({
+  filename: function (req, file, callback) {
+    callback(null, Date.now() + file.originalname);
+  },
+});
+const imageFilter = function (req, file, cb) {
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return cb(new Error('Only image files are accepted!'), false);
+  }
+  cb(null, true);
+};
+const upload = multer({ storage: storage, fileFilter: imageFilter });
+cloudinary.config({
+  cloud_name: config.get('CLOUD_NAME'),
+  api_key: config.get('CLOUDINARY_API_KEY'),
+  api_secret: config.get('CLOUDINARY_API_SECRET'),
+});
+
+// @route    POST api/profile/upload
+// @desc     upload image
+// @access   Private
+router.post('/upload', auth, upload.single('image'), async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  const profileFields = {};
+  profileFields.user = req.user.id;
+  cloudinary.v2.uploader.upload(req.file.path, (err, result) => {
+    if (err) {
+      req.json(err.message);
+    }
+    console.log(result.secure_url);
+    profileFields.avatar = result.secure_url;
+  });
+  console.log(profileFields);
+  try {
+    let profile = await Profile.findOne({
+      user: req.user.id,
+    });
+    console.log(profileFields);
+    if (profile) {
+      // If profile exists, update profile
+      profile = await Profile.findOneAndUpdate(
+        { user: req.user.id },
+        { $set: profileFields },
+        { new: true }
+      );
+      console.log(profile);
+      return res.json(profile);
+    }
+
+    // Create new profile if one is not found
+    profile = new Profile(profileFields);
+
+    await profile.save();
+    res.json(profile);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// ----------------------- END IMAGE UPLOAD ----------------------- //
 
 // @route    GET api/profile/me
 // @desc     Get current users profile
@@ -15,7 +81,7 @@ const User = require('../../models/User');
 router.get('/me', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
-      user: req.user.id
+      user: req.user.id,
     }).populate('user', ['name']);
 
     if (!profile) {
@@ -53,7 +119,7 @@ router.post('/', auth, async (req, res) => {
 
   try {
     let profile = await Profile.findOne({
-      user: req.user.id
+      user: req.user.id,
     });
 
     if (profile) {
@@ -85,7 +151,7 @@ router.get('/', async (req, res) => {
   try {
     const profiles = await Profile.find().populate('user', [
       'firstname',
-      'lastname'
+      'lastname',
     ]);
     res.json(profiles);
   } catch (err) {
@@ -100,7 +166,7 @@ router.get('/', async (req, res) => {
 router.get('/user/:user_id', async (req, res) => {
   try {
     const profile = await Profile.findOne({
-      user: req.params.user_id
+      user: req.params.user_id,
     }).populate('user', ['firstname', 'lastname']);
 
     if (!profile) return res.status(400).json({ msg: 'Profile not found' });

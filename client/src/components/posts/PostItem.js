@@ -16,9 +16,10 @@ const PostItem = ({
   removeLike,
   deletePost,
   feedPost,
-  history
+  history,
 }) => {
-  const handleDelete = id => {
+  // TODO Add useEffect to call getProfileByID so component receives avatar from user that posted
+  const handleDelete = (id) => {
     deletePost(id);
     if (!feedPost) {
       history.goBack();
@@ -46,7 +47,7 @@ const PostItem = ({
               <button
                 type='button'
                 className='btn btn-outline-primary mr-1'
-                onClick={e => {
+                onClick={(e) => {
                   addLike(_id);
                 }}
               >
@@ -58,11 +59,11 @@ const PostItem = ({
               <button
                 type='button'
                 className='btn btn-outline-danger mr-1'
-                onClick={e => removeLike(_id)}
+                onClick={(e) => removeLike(_id)}
               >
                 <ThumbsDown />
               </button>
-              {/* TODO ADD CONDITIONAL RENDERING TO REMOVE WHEN POST IS OPEN */}
+
               {feedPost && (
                 <Fragment>
                   <Link to={`/post/${_id}`}>
@@ -98,7 +99,7 @@ const PostItem = ({
 };
 
 PostItem.defaultProps = {
-  feedPost: true
+  feedPost: true,
 };
 
 PostItem.propTypes = {
@@ -106,11 +107,11 @@ PostItem.propTypes = {
   auth: PropTypes.object.isRequired,
   addLike: PropTypes.func.isRequired,
   removeLike: PropTypes.func.isRequired,
-  deletePost: PropTypes.func.isRequired
+  deletePost: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state) => ({
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { addLike, removeLike, deletePost })(

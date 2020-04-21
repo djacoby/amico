@@ -3,7 +3,8 @@ import {
   GET_PROFILES,
   PROFILE_ERROR,
   CLEAR_PROFILE,
-  UPDATE_PROFILE
+  UPDATE_PROFILE,
+  ADD_IMAGE,
 } from '../actions/types';
 
 const initialState = {
@@ -12,10 +13,10 @@ const initialState = {
   //For other users' profiles
   profiles: [],
   loading: true,
-  error: {}
+  error: {},
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
@@ -24,26 +25,31 @@ export default function(state = initialState, action) {
       return {
         ...state,
         profile: payload,
-        loading: false
+        loading: false,
       };
     case GET_PROFILES:
       return {
         ...state,
         profiles: payload,
-        loading: false
+        loading: false,
       };
     case PROFILE_ERROR:
       return {
         ...state,
         error: payload,
         loading: false,
-        profile: null
+        profile: null,
       };
     case CLEAR_PROFILE:
       return {
         ...state,
         profile: null,
-        loading: false
+        loading: false,
+      };
+    case ADD_IMAGE:
+      return {
+        ...state,
+        image: payload,
       };
     default:
       return state;

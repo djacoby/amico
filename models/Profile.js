@@ -4,34 +4,26 @@ const Schema = mongoose.Schema;
 const ProfileSchema = new Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'user',
   },
   bio: {
-    type: String
+    type: String,
   },
   birthday: {
-    type: Date
+    type: Date,
   },
   city: {
-    type: String
+    type: String,
   },
   state: {
-    type: String
+    type: String,
   },
   country: {
-    type: String
-  }
-  // avatar: {
-  //     imageName: {
-  //         type: String,
-  //         default: "none",
-  //         required: true
-  //     },
-  //     imageData: {
-  //         type: String,
-  //         required: true
-  //     }
-  // }
+    type: String,
+  },
+  avatar: {
+    type: String,
+  },
 });
 
 module.exports = Profile = mongoose.model('profile', ProfileSchema);

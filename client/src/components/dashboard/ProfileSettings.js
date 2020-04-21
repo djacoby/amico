@@ -1,8 +1,12 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { withRouter, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createProfile, getCurrentProfile } from '../../actions/profile';
+import {
+  createProfile,
+  getCurrentProfile,
+  addImage,
+} from '../../actions/profile';
 
 // Components
 import { Helmet } from 'react-helmet';
@@ -13,7 +17,8 @@ const ProfileSettings = ({
   profile: { profile, loading },
   createProfile,
   getCurrentProfile,
-  history
+  history,
+  addImage,
 }) => {
   const [formData, setFormData] = useState({
     bio: '',
@@ -22,10 +27,8 @@ const ProfileSettings = ({
     country: '',
     month: '',
     day: '',
-    year: ''
+    year: '',
   });
-
-  const [settingsChanged, updateSettingsChanged] = useState(false);
 
   useEffect(() => {
     getCurrentProfile();
@@ -35,7 +38,7 @@ const ProfileSettings = ({
         bio: loading || !profile.bio ? '' : profile.bio,
         city: loading || !profile.city ? '' : profile.city,
         state: loading || !profile.state ? '' : profile.state,
-        country: loading || !profile.country ? '' : profile.country
+        country: loading || !profile.country ? '' : profile.country,
       });
     }
   }, [getCurrentProfile]);
@@ -43,11 +46,18 @@ const ProfileSettings = ({
   const { bio, city, state, country, month, day, year } = formData;
 
   //On change method
-  const onChange = e =>
+  const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
+  const onChangeImage = (e) => {
+    const files = e.target.files;
+    const data = new FormData();
+    data.append('image', files[0]);
+    addImage(data);
+  };
+
   //On submit method
-  const onSubmit = e => {
+  const onSubmit = (e) => {
     e.preventDefault();
     if (profile === null) {
       const profileObject = {
@@ -55,27 +65,23 @@ const ProfileSettings = ({
         city: city,
         state: state,
         country: country,
-        birthday: month + '/' + day + '/' + year
+        birthday: month + '/' + day + '/' + year,
       };
-      createProfile(profileObject, history, true);
+      console.log(profileObject);
+      createProfile(profileObject, history, false);
     } else {
       const profileObject = {
         bio: bio,
         city: city,
         state: state,
-        country: country
+        country: country,
       };
+      console.log(profileObject);
       createProfile(profileObject, history, true);
     }
-
-    // updateSettingsChanged(true);
   };
 
-  // if (settingsChanged) {
-  //   return <Redirect to='/feed' />;
-  // }
-
-  return loading ? (
+  https: return loading ? (
     <Spinner />
   ) : (
     <Fragment>
@@ -93,15 +99,16 @@ const ProfileSettings = ({
 
             <form
               className='needs-validation'
+              encType='multipart/formdata'
               noValidate
-              onSubmit={e => onSubmit(e)}
+              onSubmit={(e) => onSubmit(e)}
             >
               <div className='form-group pt-3'>
                 <label htmlFor='exampleFormControlTextarea1'>Bio</label>
                 <textarea
                   value={bio}
                   name='bio'
-                  onChange={e => onChange(e)}
+                  onChange={(e) => onChange(e)}
                   className='form-control'
                   rows='3'
                 ></textarea>
@@ -115,7 +122,7 @@ const ProfileSettings = ({
                     className='form-control'
                     value={city}
                     name='city'
-                    onChange={e => onChange(e)}
+                    onChange={(e) => onChange(e)}
                     required
                   />
                   <div className='invalid-feedback'>City is required</div>
@@ -126,7 +133,7 @@ const ProfileSettings = ({
                     className='custom-select d-block w-100'
                     value={state}
                     name='state'
-                    onChange={e => onChange(e)}
+                    onChange={(e) => onChange(e)}
                     required
                   >
                     <option value=''>Choose...</option>
@@ -193,7 +200,7 @@ const ProfileSettings = ({
                     id='country'
                     value={country}
                     name='country'
-                    onChange={e => onChange(e)}
+                    onChange={(e) => onChange(e)}
                     required
                   >
                     <option value='US'>United States</option>
@@ -221,7 +228,7 @@ const ProfileSettings = ({
                         id='month'
                         value={month}
                         name='month'
-                        onChange={e => onChange(e)}
+                        onChange={(e) => onChange(e)}
                         required
                       >
                         <option value=''>Choose...</option>
@@ -249,7 +256,7 @@ const ProfileSettings = ({
                         id='day'
                         value={day}
                         name='day'
-                        onChange={e => onChange(e)}
+                        onChange={(e) => onChange(e)}
                         required
                       >
                         <option value=''>Choose...</option>
@@ -296,7 +303,7 @@ const ProfileSettings = ({
                         id='year'
                         value={year}
                         name='year'
-                        onChange={e => onChange(e)}
+                        onChange={(e) => onChange(e)}
                         required
                       >
                         <option value=''>Choose...</option>
@@ -433,8 +440,20 @@ const ProfileSettings = ({
               <hr className='mb-4' />
               <div className='form-group'>
                 <label htmlFor='img'>Upload Profile Avatar</label>
-                <input type='file' className='form-control-file' id='img' />
+                <input
+                  type='file'
+                  className='form-control-file'
+                  id='img'
+                  name='file'
+                  onChange={onChangeImage}
+                />
               </div>
+              {/* <button
+                className='btn btn-logo-color btn-lg'
+                onClick={(e) => onSubmitImage(e)}
+              >
+                Upload
+              </button> */}
 
               <hr className='mb-4' />
 
@@ -456,13 +475,16 @@ const ProfileSettings = ({
 ProfileSettings.propTypes = {
   createProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
-  getCurrentProfile: PropTypes.func.isRequired
+  getCurrentProfile: PropTypes.func.isRequired,
+  addImage: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  profile: state.profile
+const mapStateToProps = (state) => ({
+  profile: state.profile,
 });
 
-export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
-  withRouter(ProfileSettings)
-);
+export default connect(mapStateToProps, {
+  createProfile,
+  getCurrentProfile,
+  addImage,
+})(withRouter(ProfileSettings));
