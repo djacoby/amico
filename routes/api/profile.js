@@ -36,6 +36,7 @@ router.post('/upload', auth, upload.single('image'), (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
+
   const profileFields = {};
   profileFields.user = req.user.id;
   cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
@@ -43,7 +44,7 @@ router.post('/upload', auth, upload.single('image'), (req, res) => {
       req.json(err.message);
     }
 
-    profileFields.avatar = result.secure_url;
+    profileFields.avatar = result.public_id;
 
     try {
       let profile = await Profile.findOne({

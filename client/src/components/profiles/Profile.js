@@ -10,6 +10,7 @@ import avi from '../assets/default-avatar.png';
 
 // Components
 import { Helmet } from 'react-helmet';
+import { Image } from 'cloudinary-react';
 import PostItem from '../posts/PostItem';
 import Spinner from '../layout/Spinner';
 import { ArrowLeft } from 'react-feather';
@@ -56,11 +57,16 @@ const Profile = ({
               </button>
               <div className='card profile-card bg-logo-color mt-1'>
                 <div className='card-body'>
-                  <img
-                    src={profile.avatar ? profile.avatar : avi}
-                    alt='avatar'
-                    className='profile-avatar'
-                  />
+                  {profile.avatar ? (
+                    <Image
+                      cloudName='dntv3gc6l'
+                      className='profile-avatar'
+                      publicId={profile.avatar}
+                    />
+                  ) : (
+                    <img src={avi} alt='avatar' className='profile-avatar' />
+                  )}
+
                   <h2 className='card-title display-4 text-white mb-2 profile-name'>
                     {profile.user.firstname} {profile.user.lastname}
                   </h2>

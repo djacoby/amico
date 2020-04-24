@@ -6,6 +6,7 @@ import { getPosts } from '../../actions/post';
 
 // Components
 import { RefreshCw, Settings } from 'react-feather';
+import { Image } from 'cloudinary-react';
 import avi from '../assets/default-avatar.png';
 import Spinner from '../layout/Spinner';
 
@@ -21,11 +22,15 @@ const UserProfileCard = ({
       <div className='card profile-card'>
         <div className='card-body'>
           <Link className='feed-link' to={user && `/profile/${user._id}`}>
-            <img
-              src={profile.avatar ? profile.avatar : avi}
-              alt='avatar'
-              className='avatar'
-            />
+            {profile.avatar ? (
+              <Image
+                cloudName='dntv3gc6l'
+                className='avatar'
+                publicId={profile.avatar}
+              />
+            ) : (
+              <img src={avi} alt='avatar' className='avatar' />
+            )}
             <h5 className='card-title'>
               {user && user.firstname} {user && user.lastname}
             </h5>

@@ -1,37 +1,57 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
+import { Image } from 'cloudinary-react';
+
+// Actions
 import { addLike, removeLike, deletePost } from '../../actions/post';
+import { getProfileById } from '../../actions/profile';
 
 // Assets
 import { ThumbsUp, ThumbsDown, MessageSquare, XCircle } from 'react-feather';
 import avi from '../assets/default-avatar.png';
+import Spinner from '../layout/Spinner';
 
 const PostItem = ({
   auth,
-  post: { _id, text, firstname, lastname, user, likes, comments, date },
+  post: { _id, text, firstname, lastname, likes, comments, date, user },
   addLike,
   removeLike,
   deletePost,
   feedPost,
   history,
+  profile: { profile, loading },
 }) => {
   // TODO Add useEffect to call getProfileByID so component receives avatar from user that posted
+  useEffect(() => {
+    getProfileById(user);
+  }, [getProfileById]);
+
   const handleDelete = (id) => {
     deletePost(id);
     if (!feedPost) {
       history.goBack();
     }
   };
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <div className='card mt-1 post'>
       <div className='card-body'>
         <div className='row'>
           <div className='col-lg-2'>
             <Link className='feed-link' to={`/profile/${user}`}>
-              <img src={avi} alt='avatar' className='avatar' />
+              {profile.avatar ? (
+                <Image
+                  cloudName='dntv3gc6l'
+                  className='avatar'
+                  publicId={profile.avatar}
+                />
+              ) : (
+                <img src={avi} alt='avatar' className='avatar' />
+              )}
               <h5 className='card-title mt-2'>
                 {firstname} {lastname}
               </h5>
@@ -108,12 +128,16 @@ PostItem.propTypes = {
   addLike: PropTypes.func.isRequired,
   removeLike: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
+  profile: state.profile,
 });
 
-export default connect(mapStateToProps, { addLike, removeLike, deletePost })(
-  PostItem
-);
+export default connect(mapStateToProps, {
+  addLike,
+  removeLike,
+  deletePost,
+})(PostItem);
