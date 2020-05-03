@@ -14,12 +14,12 @@ import Footer from '../layout/Footer';
 const Discover = ({
   getProfiles,
   getCurrentProfile,
-  profile: { profiles, loading }
+  profile: { profiles, loading },
 }) => {
   useEffect(() => {
     getProfiles();
     getCurrentProfile();
-  }, [getProfiles]);
+  }, [getProfiles, getCurrentProfile]);
 
   return loading ? (
     <Spinner />
@@ -40,7 +40,7 @@ const Discover = ({
           <h3 className='display-4 font-logo-color text-center'>Discover</h3>
           <div className='row'>
             {profiles.length > 0 ? (
-              profiles.map(profile => (
+              profiles.map((profile) => (
                 <ProfileItem key={profile._id} profile={profile} />
               ))
             ) : (
@@ -57,11 +57,11 @@ const Discover = ({
 Discover.propTypes = {
   getCurrentProfile: PropTypes.func.isRequired,
   getProfiles: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  profile: state.profile
+const mapStateToProps = (state) => ({
+  profile: state.profile,
 });
 
 export default connect(mapStateToProps, { getProfiles, getCurrentProfile })(

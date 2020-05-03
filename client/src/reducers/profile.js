@@ -4,7 +4,6 @@ import {
   PROFILE_ERROR,
   CLEAR_PROFILE,
   UPDATE_PROFILE,
-  ADD_IMAGE,
 } from '../actions/types';
 
 const initialState = {
@@ -45,11 +44,6 @@ export default function (state = initialState, action) {
         ...state,
         profile: null,
         loading: false,
-      };
-    case ADD_IMAGE:
-      return {
-        ...state,
-        image: payload,
       };
     default:
       return state;

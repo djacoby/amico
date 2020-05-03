@@ -15,7 +15,7 @@ import { ArrowLeft } from 'react-feather';
 const Post = ({ getPost, post: { post, posts, loading }, match, history }) => {
   useEffect(() => {
     getPost(match.params.id);
-  }, [getPost]);
+  }, [getPost, match.params.id]);
 
   const userPost = posts.filter((post) => post._id === match.params.id);
 

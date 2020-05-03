@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -98,11 +98,11 @@ const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
 
 Navbar.propTypes = {
   logout: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state) => ({
+  auth: state.auth,
 });
 
 export default connect(mapStateToProps, { logout })(Navbar);

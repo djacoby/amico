@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
@@ -7,7 +7,6 @@ import { Image } from 'cloudinary-react';
 
 // Actions
 import { addLike, removeLike, deletePost } from '../../actions/post';
-import { getProfileById } from '../../actions/profile';
 
 // Assets
 import { ThumbsUp, ThumbsDown, MessageSquare, XCircle } from 'react-feather';
@@ -22,12 +21,18 @@ const PostItem = ({
   deletePost,
   feedPost,
   history,
-  profile: { profile, loading },
+  profile: { loading, profiles },
 }) => {
-  // TODO Add useEffect to call getProfileByID so component receives avatar from user that posted
+  const [userProfile, setUserProfile] = useState('');
+
   useEffect(() => {
-    getProfileById(user);
-  }, [getProfileById]);
+    if (profiles.length) {
+      const profile = profiles.filter((profile) => profile.user._id === user);
+      if (userProfile === '') {
+        setUserProfile(profile[0]);
+      }
+    }
+  }, [profiles, userProfile, user]);
 
   const handleDelete = (id) => {
     deletePost(id);
@@ -43,11 +48,11 @@ const PostItem = ({
         <div className='row'>
           <div className='col-lg-2'>
             <Link className='feed-link' to={`/profile/${user}`}>
-              {profile.avatar ? (
+              {userProfile.avatar ? (
                 <Image
                   cloudName='dntv3gc6l'
                   className='avatar'
-                  publicId={profile.avatar}
+                  publicId={userProfile.avatar}
                 />
               ) : (
                 <img src={avi} alt='avatar' className='avatar' />

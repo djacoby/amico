@@ -67,7 +67,6 @@ const ProfileSettings = ({
         country: country,
         birthday: month + '/' + day + '/' + year,
       };
-      console.log(profileObject);
       createProfile(profileObject, history, false);
     } else {
       const profileObject = {
@@ -76,12 +75,11 @@ const ProfileSettings = ({
         state: state,
         country: country,
       };
-      console.log(profileObject);
       createProfile(profileObject, history, true);
     }
   };
 
-  https: return loading ? (
+  return loading ? (
     <Spinner />
   ) : (
     <Fragment>

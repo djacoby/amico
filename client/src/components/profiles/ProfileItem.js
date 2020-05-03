@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
-import { User, UserPlus } from 'react-feather';
+import { User } from 'react-feather';
+import { Image } from 'cloudinary-react';
 import avi from '../assets/default-avatar.png';
 
 const ProfileItem = ({
@@ -10,15 +11,24 @@ const ProfileItem = ({
     user: { _id, firstname, lastname },
     birthday,
     city,
-    state
-  }
+    state,
+    avatar,
+  },
 }) => {
   return (
     <div className='col-lg-4 mb-3'>
       <div className='card mt-1 mb-3 post text-center'>
         <div className='card-body'>
           <Link className='feed-link' to={`/profile/${_id}`}>
-            <img src={avi} alt='avatar' className='profile-avatar' />
+            {avatar ? (
+              <Image
+                cloudName='dntv3gc6l'
+                className='profile-avatar'
+                publicId={avatar}
+              />
+            ) : (
+              <img src={avi} alt='avatar' className='profile-avatar' />
+            )}
             <h5 className='card-title mt-2'>
               {firstname} {lastname}
             </h5>
@@ -52,7 +62,7 @@ const ProfileItem = ({
 };
 
 ProfileItem.propTypes = {
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };
 
 export default ProfileItem;

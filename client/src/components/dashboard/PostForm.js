@@ -10,7 +10,7 @@ const PostForm = ({ addPost }) => {
       <div className='card profile-card'>
         <form
           className='mt-4'
-          onSubmit={e => {
+          onSubmit={(e) => {
             e.preventDefault();
             addPost({ text });
             setText('');
@@ -23,17 +23,15 @@ const PostForm = ({ addPost }) => {
               rows='5'
               placeholder='What are your thoughts?'
               value={text}
-              onChange={e => setText(e.target.value)}
+              onChange={(e) => setText(e.target.value)}
               required
             ></textarea>
-            <a className='feed-link text-white' href='#'>
-              <button
-                type='submit'
-                className='btn btn-logo-color mt-3 post-form-button'
-              >
-                Post
-              </button>
-            </a>
+            <button
+              type='submit'
+              className='btn btn-logo-color mt-3 post-form-button'
+            >
+              Post
+            </button>
           </div>
         </form>
       </div>
@@ -42,7 +40,7 @@ const PostForm = ({ addPost }) => {
 };
 
 PostForm.propTypes = {
-  addPost: PropTypes.func.isRequired
+  addPost: PropTypes.func.isRequired,
 };
 
 export default connect(null, { addPost })(PostForm);

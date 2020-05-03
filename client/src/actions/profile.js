@@ -8,7 +8,6 @@ import {
   UPDATE_PROFILE,
   CLEAR_PROFILE,
   ACCOUNT_DELETED,
-  ADD_IMAGE,
 } from './types';
 
 // Get current users profile
@@ -71,7 +70,7 @@ export const addImage = (imageData) => async (dispatch) => {
       },
     };
 
-    const res = axios.post('/api/profile/upload', imageData);
+    const res = axios.post('/api/profile/upload', imageData, config);
     dispatch({
       type: UPDATE_PROFILE,
       payload: res.data,

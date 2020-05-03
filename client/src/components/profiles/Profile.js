@@ -37,7 +37,7 @@ const Profile = ({
   ) : (
     <Fragment>
       <Helmet>
-        {!profile.user.firstname === undefined ? (
+        {profile.user.firstname === undefined ? (
           <title>Amico</title>
         ) : (
           <title>
@@ -67,6 +67,7 @@ const Profile = ({
                     <img src={avi} alt='avatar' className='profile-avatar' />
                   )}
 
+                  {/* END NEW */}
                   <h2 className='card-title display-4 text-white mb-2 profile-name'>
                     {profile.user.firstname} {profile.user.lastname}
                   </h2>
