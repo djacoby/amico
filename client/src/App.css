@@ -8,6 +8,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   height: 100%;
@@ -115,6 +119,11 @@ body {
 
 .post-date {
   font-size: 0.8rem;
+}
+
+/* POST ITEM */
+.post-title {
+  font-size: 100%;
 }
 
 /* LOGIN PAGE */

@@ -68,7 +68,7 @@ const Profile = ({
                   )}
 
                   {/* END NEW */}
-                  <h2 className='card-title display-4 text-white mb-2 profile-name'>
+                  <h2 className='display-4 text-white mb-2 profile-name'>
                     {profile.user.firstname} {profile.user.lastname}
                   </h2>
                   <div className='profile-headings'>

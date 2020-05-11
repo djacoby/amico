@@ -39,7 +39,7 @@ const PostItem = ({
     }
   };
   return loading ? (
-    <Spinner />
+    <Fragment></Fragment>
   ) : (
     <div className='card mt-1 post'>
       <div className='card-body'>
@@ -55,7 +55,7 @@ const PostItem = ({
               ) : (
                 <img src={avi} alt='avatar' className='avatar' />
               )}
-              <h5 className='card-title mt-2'>
+              <h5 className='post-title mt-2'>
                 {firstname} {lastname}
               </h5>
             </Link>
