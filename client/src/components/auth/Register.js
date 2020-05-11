@@ -13,17 +13,17 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     lastname: '',
     email: '',
     password: '',
-    password2: ''
+    password2: '',
   });
 
   const { firstname, lastname, email, password, password2 } = formData;
 
   //Pass form data to state
-  const onChange = e =>
+  const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   //Form submission method
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
@@ -53,7 +53,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             <div className='col-md-12 order-md-1'>
               <form
                 className='needs-validation'
-                onSubmit={e => onSubmit(e)}
+                onSubmit={(e) => onSubmit(e)}
                 noValidate
               >
                 <div className='row'>
@@ -65,7 +65,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                       placeholder='John'
                       name='firstname'
                       value={firstname}
-                      onChange={e => onChange(e)}
+                      onChange={(e) => onChange(e)}
                       required
                     />
                     <div className='invalid-feedback'>
@@ -80,7 +80,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                       placeholder='Smith'
                       name='lastname'
                       value={lastname}
-                      onChange={e => onChange(e)}
+                      onChange={(e) => onChange(e)}
                       required
                     />
                     <div className='invalid-feedback'>
@@ -97,7 +97,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                     placeholder='you@example.com'
                     name='email'
                     value={email}
-                    onChange={e => onChange(e)}
+                    onChange={(e) => onChange(e)}
                     required
                   />
                   <div className='invalid-feedback'>
@@ -114,7 +114,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                     name='password'
                     minLength='8'
                     value={password}
-                    onChange={e => onChange(e)}
+                    onChange={(e) => onChange(e)}
                     required
                   />
                   <div className='invalid-feedback'>
@@ -131,7 +131,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                     name='password2'
                     minLength='8'
                     value={password2}
-                    onChange={e => onChange(e)}
+                    onChange={(e) => onChange(e)}
                     required
                   />
                   <div className='invalid-feedback'>Passwords do not match</div>
@@ -157,11 +157,11 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
 };
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(mapStateToProps, { setAlert, register })(Register);

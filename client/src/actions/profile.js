@@ -8,6 +8,7 @@ import {
   UPDATE_PROFILE,
   CLEAR_PROFILE,
   ACCOUNT_DELETED,
+  CLEAR_PROFILES,
 } from './types';
 
 // Get current users profile
@@ -23,40 +24,6 @@ export const getCurrentProfile = () => async (dispatch) => {
     dispatch({
       type: PROFILE_ERROR,
       payload: { msg: error.response.data.msg, status: error.response.status },
-    });
-  }
-};
-
-// Update Profile
-export const updateProfile = (formData, history) => async (dispatch) => {
-  try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
-    const res = await axios.put('/api/profile/', formData, config);
-
-    dispatch({
-      type: UPDATE_PROFILE,
-      payload: res.data,
-    });
-
-    dispatch(setAlert('Profile Updated', 'success'));
-
-    history.push('/feed');
-  } catch (error) {
-    const errors = error.response.data.errors;
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.msg, 'danger')));
-    }
-    dispatch({
-      type: PROFILE_ERROR,
-      payload: {
-        msg: error.response.data.msg,
-        status: error.response.status,
-      },
     });
   }
 };
@@ -94,8 +61,7 @@ export const addImage = (imageData) => async (dispatch) => {
 
 //Get all profiles
 export const getProfiles = () => async (dispatch) => {
-  //Remove previous users profiles from DOM
-  dispatch({ type: CLEAR_PROFILE });
+  //Remove previous users profiles from App State
   try {
     const res = await axios.get('/api/profile');
 
@@ -129,7 +95,7 @@ export const getProfileById = (userId) => async (dispatch) => {
 };
 
 //Create or update a profile
-export const createProfile = (formData, edit) => async (dispatch) => {
+export const updateProfile = (formData, edit) => async (dispatch) => {
   try {
     const config = {
       headers: {
@@ -145,6 +111,8 @@ export const createProfile = (formData, edit) => async (dispatch) => {
     });
 
     dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success'));
+
+    dispatch({ type: CLEAR_PROFILES });
   } catch (error) {
     const errors = error.response.data.errors;
     if (errors) {

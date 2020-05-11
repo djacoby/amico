@@ -4,6 +4,7 @@ import {
   PROFILE_ERROR,
   CLEAR_PROFILE,
   UPDATE_PROFILE,
+  CLEAR_PROFILES,
 } from '../actions/types';
 
 const initialState = {
@@ -43,6 +44,12 @@ export default function (state = initialState, action) {
       return {
         ...state,
         profile: null,
+        loading: false,
+      };
+    case CLEAR_PROFILES:
+      return {
+        ...state,
+        profiles: [],
         loading: false,
       };
     default:

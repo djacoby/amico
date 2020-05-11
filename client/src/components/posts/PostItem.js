@@ -27,12 +27,10 @@ const PostItem = ({
 
   useEffect(() => {
     if (profiles.length) {
-      const profile = profiles.filter((profile) => profile.user._id === user);
-      if (userProfile === '') {
-        setUserProfile(profile[0]);
-      }
+      const profile = profiles.find((profile) => profile.user._id === user);
+      setUserProfile(profile);
     }
-  }, [profiles, userProfile, user]);
+  }, [userProfile, profiles, user]);
 
   const handleDelete = (id) => {
     deletePost(id);

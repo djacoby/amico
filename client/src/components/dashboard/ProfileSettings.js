@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  createProfile,
+  updateProfile,
   getCurrentProfile,
   addImage,
 } from '../../actions/profile';
@@ -15,7 +15,7 @@ import Spinner from '../layout/Spinner';
 
 const ProfileSettings = ({
   profile: { profile, loading },
-  createProfile,
+  updateProfile,
   getCurrentProfile,
   history,
   addImage,
@@ -67,7 +67,7 @@ const ProfileSettings = ({
         country: country,
         birthday: month + '/' + day + '/' + year,
       };
-      createProfile(profileObject, history, false);
+      updateProfile(profileObject, history, false);
     } else {
       const profileObject = {
         bio: bio,
@@ -75,7 +75,7 @@ const ProfileSettings = ({
         state: state,
         country: country,
       };
-      createProfile(profileObject, history, true);
+      updateProfile(profileObject, history, true);
     }
   };
 
@@ -471,7 +471,7 @@ const ProfileSettings = ({
 };
 
 ProfileSettings.propTypes = {
-  createProfile: PropTypes.func.isRequired,
+  updateProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   getCurrentProfile: PropTypes.func.isRequired,
   addImage: PropTypes.func.isRequired,
@@ -482,7 +482,7 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  createProfile,
+  updateProfile,
   getCurrentProfile,
   addImage,
 })(withRouter(ProfileSettings));
