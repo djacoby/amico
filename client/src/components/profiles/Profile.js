@@ -10,7 +10,7 @@ import avi from '../assets/default-avatar.png';
 
 // Components
 import { Helmet } from 'react-helmet';
-import { Image } from 'cloudinary-react';
+import { Image, Transformation } from 'cloudinary-react';
 import PostItem from '../posts/PostItem';
 import Spinner from '../layout/Spinner';
 import { ArrowLeft } from 'react-feather';
@@ -62,7 +62,14 @@ const Profile = ({
                       cloudName='dntv3gc6l'
                       className='profile-avatar'
                       publicId={profile.avatar}
-                    />
+                    >
+                      <Transformation
+                        width='250'
+                        height='250'
+                        gravity='faces'
+                        crop='fill'
+                      />
+                    </Image>
                   ) : (
                     <img src={avi} alt='avatar' className='profile-avatar' />
                   )}

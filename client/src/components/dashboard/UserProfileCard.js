@@ -6,7 +6,7 @@ import { getPosts } from '../../actions/post';
 
 // Components
 import { RefreshCw, Settings } from 'react-feather';
-import { Image } from 'cloudinary-react';
+import { Image, Transformation } from 'cloudinary-react';
 import avi from '../assets/default-avatar.png';
 import Spinner from '../layout/Spinner';
 
@@ -27,7 +27,14 @@ const UserProfileCard = ({
                 cloudName='dntv3gc6l'
                 className='avatar'
                 publicId={profile.avatar}
-              />
+              >
+                <Transformation
+                  width='250'
+                  height='250'
+                  gravity='faces'
+                  crop='fill'
+                />
+              </Image>
             ) : (
               <img src={avi} alt='avatar' className='avatar' />
             )}

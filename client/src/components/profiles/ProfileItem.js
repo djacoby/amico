@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import { User } from 'react-feather';
-import { Image } from 'cloudinary-react';
+import { Image, Transformation } from 'cloudinary-react';
 import avi from '../assets/default-avatar.png';
 
 const ProfileItem = ({
@@ -25,7 +25,14 @@ const ProfileItem = ({
                 cloudName='dntv3gc6l'
                 className='profile-avatar'
                 publicId={avatar}
-              />
+              >
+                <Transformation
+                  width='250'
+                  height='250'
+                  gravity='faces'
+                  crop='fill'
+                />
+              </Image>
             ) : (
               <img src={avi} alt='avatar' className='profile-avatar' />
             )}
