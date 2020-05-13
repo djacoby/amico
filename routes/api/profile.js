@@ -31,7 +31,7 @@ cloudinary.config({
 // @route    POST api/profile/upload
 // @desc     upload image
 // @access   Private
-router.post('/upload', auth, upload.single('image'), (req, res) => {
+router.post('/upload', auth, upload.single('image'), async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -39,39 +39,42 @@ router.post('/upload', auth, upload.single('image'), (req, res) => {
 
   const profileFields = {};
   profileFields.user = req.user.id;
-  cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
-    if (err) {
-      req.json(err.message);
-    }
 
-    profileFields.avatar = result.public_id;
+  try {
+    let profile = await Profile.findOne({
+      user: req.user.id,
+    });
 
-    try {
-      let profile = await Profile.findOne({
-        user: req.user.id,
-      });
+    // If profile exists
+    if (profile) {
+      // If user already has an avatar
+      if (profile.avatar) {
+        cloudinary.v2.uploader.destroy(profile.avatar);
+      }
+      cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
+        if (err) {
+          req.json(err.message);
+        }
 
-      if (profile) {
-        // If profile exists, update profile
+        profileFields.avatar = result.public_id;
+
         profile = await Profile.findOneAndUpdate(
           { user: req.user.id },
           { $set: profileFields },
           { new: true }
         );
-
-        return res.json(profile);
-      }
-
-      // Create new profile if one is not found
-      profile = new Profile(profileFields);
-
-      await profile.save();
-      res.json(profile);
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).send('Server Error');
+      });
     }
-  });
+
+    // Create new profile if one is not found
+    profile = new Profile(profileFields);
+
+    await profile.save();
+    res.json(profile);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send('Server Error');
+  }
 });
 
 // ----------------------- END IMAGE UPLOAD ----------------------- //

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
-import { Image } from 'cloudinary-react';
+import { Image, Transformation } from 'cloudinary-react';
 
 // Actions
 import { addLike, removeLike, deletePost } from '../../actions/post';
@@ -51,7 +51,16 @@ const PostItem = ({
                   cloudName='dntv3gc6l'
                   className='avatar'
                   publicId={userProfile.avatar}
-                />
+                  width='200'
+                  crop='scale'
+                >
+                  <Transformation
+                    width='250'
+                    height='250'
+                    gravity='faces'
+                    crop='fill'
+                  />
+                </Image>
               ) : (
                 <img src={avi} alt='avatar' className='avatar' />
               )}
