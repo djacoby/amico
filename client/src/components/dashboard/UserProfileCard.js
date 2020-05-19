@@ -15,14 +15,14 @@ const UserProfileCard = ({
   getPosts,
   profile: { profile },
 }) => {
-  return (loading && user === null) || profile === null ? (
+  return loading ? (
     <Spinner />
   ) : (
     <div className='col-lg-4 col-md-12 mb-3'>
       <div className='card profile-card'>
         <div className='card-body'>
           <Link className='feed-link' to={user && `/profile/${user._id}`}>
-            {profile.avatar ? (
+            {profile !== null && profile.avatar ? (
               <Image
                 cloudName='dntv3gc6l'
                 className='avatar'

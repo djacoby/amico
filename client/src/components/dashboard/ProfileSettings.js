@@ -254,6 +254,7 @@ const ProfileSettings = ({
                         id='day'
                         value={day}
                         name='day'
+                        disabled={month ? false : true}
                         onChange={(e) => onChange(e)}
                         required
                       >
@@ -301,6 +302,7 @@ const ProfileSettings = ({
                         id='year'
                         value={year}
                         name='year'
+                        disabled={month ? false : true}
                         onChange={(e) => onChange(e)}
                         required
                       >
