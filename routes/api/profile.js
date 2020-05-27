@@ -67,7 +67,9 @@ router.post('/upload', auth, upload.single('image'), async (req, res) => {
     }
 
     // Create new profile if one is not found
-    profile = new Profile(profileFields);
+    if (!profile) {
+      profile = new Profile(profileFields);
+    }
 
     await profile.save();
     res.json(profile);
