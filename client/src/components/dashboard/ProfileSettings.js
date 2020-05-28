@@ -6,6 +6,7 @@ import {
   updateProfile,
   getCurrentProfile,
   addImage,
+  deleteAccount,
 } from '../../actions/profile';
 
 // Components
@@ -13,6 +14,7 @@ import { Helmet } from 'react-helmet';
 import Footer from '../layout/Footer';
 import Spinner from '../layout/Spinner';
 import DatePicker from 'react-datepicker';
+import { XCircle } from 'react-feather';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -20,6 +22,7 @@ const ProfileSettings = ({
   profile: { profile, loading },
   updateProfile,
   getCurrentProfile,
+  deleteAccount,
   history,
   addImage,
 }) => {
@@ -42,6 +45,7 @@ const ProfileSettings = ({
         state: loading || !profile.state ? '' : profile.state,
         country: loading || !profile.country ? '' : profile.country,
       });
+      setBirthDate(loading || !profile.birthday ? '' : profile.birthday);
     }
   }, [getCurrentProfile]);
 
@@ -61,24 +65,24 @@ const ProfileSettings = ({
   //On submit method
   const onSubmit = (e) => {
     e.preventDefault();
-    if (profile === null) {
-      const profileObject = {
-        bio: bio,
-        city: city,
-        state: state,
-        country: country,
-        birthday: birthDate,
-      };
-      updateProfile(profileObject, history, false);
-    } else {
-      const profileObject = {
-        bio: bio,
-        city: city,
-        state: state,
-        country: country,
-      };
-      updateProfile(profileObject, history, true);
-    }
+    // if (profile === null) {
+    const profileObject = {
+      bio: bio,
+      city: city,
+      state: state,
+      country: country,
+      birthday: birthDate,
+    };
+    updateProfile(profileObject, history, false);
+    // } else {
+    //   const profileObject = {
+    //     bio: bio,
+    //     city: city,
+    //     state: state,
+    //     country: country,
+    //   };
+    //   updateProfile(profileObject, history, true);
+    // }
   };
 
   return loading ? (
@@ -259,6 +263,22 @@ const ProfileSettings = ({
                 Save
               </button>
             </form>
+            {profile !== null && (
+              <div>
+                <hr />
+                <h3>Danger Zone</h3>
+                <p className='text-muted'>
+                  *WARNING! This action cannot be undone!
+                </p>
+                <button
+                  className='btn btn-danger btn-lg mt-2'
+                  onClick={() => deleteAccount()}
+                >
+                  <XCircle /> Delete Account
+                </button>
+                <hr />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -282,4 +302,5 @@ export default connect(mapStateToProps, {
   updateProfile,
   getCurrentProfile,
   addImage,
+  deleteAccount,
 })(withRouter(ProfileSettings));

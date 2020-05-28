@@ -63,15 +63,24 @@ router.post('/upload', auth, upload.single('image'), async (req, res) => {
           { $set: profileFields },
           { new: true }
         );
+        await profile.save();
       });
     }
 
     // Create new profile if one is not found
     if (!profile) {
-      profile = new Profile(profileFields);
+      cloudinary.v2.uploader.upload(req.file.path, async (err, result) => {
+        if (err) {
+          req.json(err.message);
+        }
+
+        profileFields.avatar = result.public_id;
+
+        profile = new Profile(profileFields);
+        await profile.save();
+      });
     }
 
-    await profile.save();
     res.json(profile);
   } catch (error) {
     console.error(error.message);
