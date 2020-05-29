@@ -14,7 +14,7 @@ import { Helmet } from 'react-helmet';
 import Footer from '../layout/Footer';
 import Spinner from '../layout/Spinner';
 import DatePicker from 'react-datepicker';
-import { XCircle } from 'react-feather';
+import { XCircle, Settings } from 'react-feather';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -34,6 +34,10 @@ const ProfileSettings = ({
   });
 
   const [birthDate, setBirthDate] = useState(new Date());
+
+  const [advancedSettingsClicked, updateAdvancedSettingsClicked] = useState(
+    false
+  );
 
   useEffect(() => {
     getCurrentProfile();
@@ -65,7 +69,7 @@ const ProfileSettings = ({
   //On submit method
   const onSubmit = (e) => {
     e.preventDefault();
-    // if (profile === null) {
+
     const profileObject = {
       bio: bio,
       city: city,
@@ -74,15 +78,14 @@ const ProfileSettings = ({
       birthday: birthDate,
     };
     updateProfile(profileObject, history, false);
-    // } else {
-    //   const profileObject = {
-    //     bio: bio,
-    //     city: city,
-    //     state: state,
-    //     country: country,
-    //   };
-    //   updateProfile(profileObject, history, true);
-    // }
+  };
+
+  // Advanced settings on click
+  const advSettingsOnClick = () => {
+    updateAdvancedSettingsClicked(!advancedSettingsClicked);
+    if (!advancedSettingsClicked) {
+      document.getElementById('Advanced-Settings').scrollIntoView();
+    }
   };
 
   return loading ? (
@@ -99,8 +102,19 @@ const ProfileSettings = ({
       <div className='main-container'>
         <div className='container'>
           <div className='pt-5'>
-            {profile === null ? <h2>Create Profile</h2> : <h2>Settings</h2>}
-
+            {profile === null ? (
+              <h2 className='settings-title'>Create Profile</h2>
+            ) : (
+              <h2 className='settings-title'>Settings</h2>
+            )}
+            {profile !== null && (
+              <button
+                className='btn btn-primary settings-advanced-settings-btn'
+                onClick={() => advSettingsOnClick()}
+              >
+                <Settings /> Advanced
+              </button>
+            )}
             <form
               className='needs-validation'
               encType='multipart/formdata'
@@ -263,10 +277,11 @@ const ProfileSettings = ({
                 Save
               </button>
             </form>
-            {profile !== null && (
+            <hr id='Advanced-Settings' />
+
+            {profile !== null && advancedSettingsClicked && (
               <div>
-                <hr />
-                <h3>Danger Zone</h3>
+                <h3>Advanced Settings</h3>
                 <p className='text-muted'>
                   *WARNING! This action cannot be undone!
                 </p>

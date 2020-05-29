@@ -121,6 +121,15 @@ body {
   font-size: 0.8rem;
 }
 
+/* SETTINGS */
+.settings-title {
+  display: inline-block;
+}
+
+.settings-advanced-settings-btn {
+  float: right;
+}
+
 /* POST ITEM */
 .post-title {
   font-size: 100%;
