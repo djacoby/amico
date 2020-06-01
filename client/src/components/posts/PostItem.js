@@ -11,7 +11,6 @@ import { addLike, removeLike, deletePost } from '../../actions/post';
 // Assets
 import { ThumbsUp, ThumbsDown, MessageSquare, XCircle } from 'react-feather';
 import avi from '../assets/default-avatar.png';
-import Spinner from '../layout/Spinner';
 
 const PostItem = ({
   auth,

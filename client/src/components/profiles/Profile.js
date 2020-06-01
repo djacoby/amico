@@ -28,7 +28,7 @@ const Profile = ({
     getUserPosts(match.params.id);
   }, [getProfileById, getUserPosts, match.params.id]);
 
-  if (profile === null) {
+  if (profile === null && !loading) {
     return <Redirect to='/settings' />;
   }
 
