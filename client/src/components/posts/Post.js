@@ -39,9 +39,12 @@ const Post = ({ getPost, post: { post, posts, loading }, match, history }) => {
             <PostItem post={userPost[0]} history={history} feedPost={false} />
             <PostCommentForm postId={post._id} />
           </div>
-          {post.comments.map((comment) => (
-            <Comment key={comment._id} postId={post._id} comment={comment} />
-          ))}
+          {post.comments
+            .slice(0)
+            .reverse()
+            .map((comment) => (
+              <Comment key={comment._id} postId={post._id} comment={comment} />
+            ))}
         </div>
       </div>
     </Fragment>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import { Image, Transformation } from 'cloudinary-react';
 
 // Actions
@@ -20,16 +21,16 @@ const PostItem = ({
   deletePost,
   feedPost,
   history,
-  profile: { loading, profiles },
 }) => {
   const [userProfile, setUserProfile] = useState('');
 
   useEffect(() => {
-    if (profiles.length) {
-      const profile = profiles.find((profile) => profile.user._id === user);
-      setUserProfile(profile);
+    async function fetchData() {
+      const res = await axios.get(`/api/profile/user/${user}`);
+      setUserProfile(res.data);
     }
-  }, [userProfile, profiles, user]);
+    fetchData();
+  }, [setUserProfile]);
 
   const handleDelete = (id) => {
     deletePost(id);
@@ -37,9 +38,7 @@ const PostItem = ({
       history.goBack();
     }
   };
-  return loading ? (
-    <Fragment></Fragment>
-  ) : (
+  return (
     <div className='card mt-1 post'>
       <div className='card-body'>
         <div className='row'>
@@ -139,12 +138,10 @@ PostItem.propTypes = {
   addLike: PropTypes.func.isRequired,
   removeLike: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  profile: state.profile,
 });
 
 export default connect(mapStateToProps, {

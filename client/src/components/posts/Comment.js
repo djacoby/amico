@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -7,7 +7,7 @@ import axios from 'axios';
 
 // Actions
 import { deleteComment } from '../../actions/post';
-import { getProfileById } from '../../actions/profile';
+
 // Components
 import { Image, Transformation } from 'cloudinary-react';
 import { XCircle } from 'react-feather';
@@ -18,19 +18,18 @@ const Comment = ({
   comment: { _id, text, firstname, lastname, user, date },
   auth,
   deleteComment,
-  profile: { loading, profile },
 }) => {
   const [userProfile, setUserProfile] = useState('');
 
-  useEffect(async () => {
-    const res = await axios.get(`/api/profile/user/${user}`);
-    setUserProfile(res.data);
-    console.log(userProfile);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      const res = await axios.get(`/api/profile/user/${user}`);
+      setUserProfile(res.data);
+    }
+    fetchData();
+  }, [setUserProfile, user]);
 
-  return loading ? (
-    <Fragment></Fragment>
-  ) : (
+  return (
     <div className='card mt-1 post'>
       <div className='card-body'>
         <div className='row'>
@@ -54,7 +53,7 @@ const Comment = ({
               ) : (
                 <img src={avi} alt='avatar' className='avatar' />
               )}
-              <h5 className='card-title mt-2'>
+              <h5 className='post-title mt-2'>
                 {firstname} {lastname}
               </h5>
             </Link>
@@ -87,12 +86,10 @@ Comment.propTypes = {
   comment: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   deleteComment: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  profile: state.auth,
 });
 
 export default connect(mapStateToProps, { deleteComment })(Comment);

@@ -21,14 +21,14 @@ const Navbar = ({ auth: { user, isAuthenticated, loading }, logout }) => {
             <Zap /> Discover
           </Link>
         </li>
-        <li className='nav-item'>
-          <Link
-            className='nav-link'
-            to={user !== null && `/profile/${user._id}`}
-          >
-            <User /> Profile
-          </Link>
-        </li>
+        {user !== null && (
+          <li className='nav-item'>
+            <Link className='nav-link' to={`/profile/${user._id}`}>
+              <User /> Profile
+            </Link>
+          </li>
+        )}
+
         <li className='nav-item'>
           <Link className='nav-link' to='/settings'>
             <Settings /> Settings
