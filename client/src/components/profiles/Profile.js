@@ -1,10 +1,10 @@
-import React, { useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Redirect } from 'react-router';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getProfileById } from '../../actions/profile';
 import { getUserPosts } from '../../actions/post';
 import Moment from 'react-moment';
+import axios from 'axios';
 
 import avi from '../assets/default-avatar.png';
 
@@ -16,32 +16,37 @@ import Spinner from '../layout/Spinner';
 import { ArrowLeft } from 'react-feather';
 
 const Profile = ({
-  getProfileById,
   getUserPosts,
   profile: { profile, loading },
   post: { posts },
   match,
   history,
 }) => {
+  const [userProfile, setUserProfile] = useState('');
+
   useEffect(() => {
-    getProfileById(match.params.id);
+    async function fetchData() {
+      const res = await axios.get(`/api/profile/user/${match.params.id}`);
+      setUserProfile(res.data);
+    }
+    fetchData();
     getUserPosts(match.params.id);
-  }, [getProfileById, getUserPosts, match.params.id]);
+  }, [setUserProfile, match.params.id]);
 
   if (profile === null && !loading) {
     return <Redirect to='/settings' />;
   }
 
-  return loading || profile === null ? (
+  return loading || userProfile === '' ? (
     <Spinner />
   ) : (
     <Fragment>
       <Helmet>
-        {profile.user.firstname === undefined ? (
+        {userProfile.user.firstname === undefined ? (
           <title>Amico</title>
         ) : (
           <title>
-            {`Amico · ${profile.user.firstname} ${profile.user.lastname}`}
+            {`Amico · ${userProfile.user.firstname} ${userProfile.user.lastname}`}
           </title>
         )}
       </Helmet>
@@ -57,11 +62,11 @@ const Profile = ({
               </button>
               <div className='card profile-card bg-logo-color mt-1'>
                 <div className='card-body'>
-                  {profile.avatar ? (
+                  {userProfile.avatar ? (
                     <Image
                       cloudName='dntv3gc6l'
                       className='profile-avatar'
-                      publicId={profile.avatar}
+                      publicId={userProfile.avatar}
                     >
                       <Transformation
                         width='250'
@@ -76,21 +81,21 @@ const Profile = ({
 
                   {/* END NEW */}
                   <h2 className='display-4 text-white mb-2 profile-name'>
-                    {profile.user.firstname} {profile.user.lastname}
+                    {userProfile.user.firstname} {userProfile.user.lastname}
                   </h2>
                   <div className='profile-headings'>
                     <h3 className='mb-3'>
                       <i data-feather='map-pin'></i>
-                      {profile.city}, {profile.state}
+                      {userProfile.city}, {userProfile.state}
                     </h3>
                     <h4>
                       <Moment fromNow ago>
-                        {profile.birthday}
+                        {userProfile.birthday}
                       </Moment>{' '}
                       old
                     </h4>
                   </div>
-                  <p className='profile-bio'>{profile.bio}</p>
+                  <p className='profile-bio'>{userProfile.bio}</p>
                 </div>
               </div>
             </div>
@@ -119,6 +124,4 @@ const mapStateToProps = (state) => ({
   post: state.post,
 });
 
-export default connect(mapStateToProps, { getProfileById, getUserPosts })(
-  Profile
-);
+export default connect(mapStateToProps, { getUserPosts })(Profile);
