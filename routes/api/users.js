@@ -32,17 +32,13 @@ pwSchema
 router.post(
   '/',
   [
-    check('firstname', 'First Name is required')
-      .not()
-      .isEmpty(),
-    check('lastname', 'Last Name is required')
-      .not()
-      .isEmpty(),
+    check('firstname', 'First Name is required').not().isEmpty(),
+    check('lastname', 'Last Name is required').not().isEmpty(),
     check('email', 'Please include valid email').isEmail(),
     check(
       'password',
       'Please enter valid password (Minimum 8 characters with one uppercase letter and one number.)'
-    ).custom(value => {
+    ).custom((value) => {
       const isPwValid = pwSchema.validate(value);
 
       // When at least one requirement is not met
@@ -53,7 +49,7 @@ router.post(
       }
 
       return true;
-    })
+    }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -78,7 +74,7 @@ router.post(
         firstname,
         lastname,
         email,
-        password
+        password,
       });
 
       // Encrypt password
@@ -90,8 +86,8 @@ router.post(
       //Return jsonwebtoken
       const payload = {
         user: {
-          id: user.id
-        }
+          id: user.id,
+        },
       };
 
       jwt.sign(

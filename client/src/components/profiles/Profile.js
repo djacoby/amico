@@ -37,7 +37,7 @@ const Profile = ({
     return <Redirect to='/settings' />;
   }
 
-  return loading || userProfile === '' ? (
+  return userProfile === '' ? (
     <Spinner />
   ) : (
     <Fragment>
