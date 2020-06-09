@@ -16,9 +16,7 @@
 
 ## About
 
-Full stack javascript social media platform built on the MERN stack (MongoDB, Express, React, Node.js) with Redux for
-application state management. This project uses MongoDB atlas for cloud database storage as well as Cloudinary for asset cloud
-storage.
+"Amico" is a full stack javascript social media platform built on the MERN stack (MongoDB, Express, React, Node.js) with Redux for application state management. Bootstrap 4 was used for the UI design with some custom classes created to match the bootstrap design paradigm. This project uses MongoDB atlas for cloud database storage, and Cloudinary for image asset cloud storage. Users can register an account, create a profile, post stauses, comment on other users posts as well as like and unlike posts.
 
 ## Setup
 
