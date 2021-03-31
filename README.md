@@ -1,4 +1,4 @@
-<a href="https://amico-david-jacoby.herokuapp.com/"><img src="https://raw.githubusercontent.com/jacoby934/amico/master/client/src/components/assets/amico-logo.png" style="text-align: center;" title="amico" alt="amico log"></a>
+<a href="https://amico-david-jacoby.herokuapp.com/"><img src="https://raw.githubusercontent.com/jacoby934/amico/master/client/src/components/assets/amico-logo.png" align="center" title="amico" alt="amico log"></a>
 
 ## amico
 
